@@ -142,3 +142,88 @@ header strong {
 .action-card:hover .arrow {
     transform: translateX(10px);        /* Arrow moves right */
 }
+
+.dashboard-grid {
+    display: grid;
+    /* The Calendar gets 2 parts of space, Standings get 1 part */
+    grid-template-columns: 2fr 1fr; 
+    gap: 20px;
+    padding: 0 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Make it stack on mobile phones */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Generic Card Style for Tables --- */
+.dashboard-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden; /* Keeps corners rounded */
+    border-top: 5px solid #e10600; /* F1 Red Top Border */
+}
+
+.card-header {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-family: 'MyF1Bold', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+/* --- F1 Table Styling --- */
+.table-responsive {
+    overflow-x: auto; /* Scrollbar if table is too wide */
+}
+
+.f1-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'MyF1Font', sans-serif; /* Or Titillium Web */
+    font-size: 0.9rem;
+}
+
+.f1-table th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: #15151e; /* Dark header */
+    color: white;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.f1-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Zebra Striping for rows */
+.f1-table tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.f1-table tbody tr:hover {
+    background-color: #ffe5e5; /* Light red hover */
+}
+
+/* Special Styling for the "Position" column */
+.pos-badge {
+    background-color: #15151e;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
