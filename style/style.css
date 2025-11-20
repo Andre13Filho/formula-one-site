@@ -1,0 +1,82 @@
+/* style/style.css */
+
+/* 1. Regular Font */
+@font-face {
+    font-family: 'MyF1Font';
+    src: url('../fonts/Formula1-Regular_web_0.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 2. Bold Font */
+@font-face {
+    font-family: 'MyF1Bold';
+    src: url('../fonts/Formula1-Bold_web_0.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* 3. Wide Font (Optional, good for big headers) */
+@font-face {
+    font-family: 'MyF1Wide';
+    src: url('../fonts/Formula1-Wide_web_0.ttf') format('truetype');
+}
+
+/* BODY STYLES */
+body {
+    margin: 0;
+    background-color: #f1f1f1;
+    font-family: 'Arial', sans-serif;/* Uses the font we defined above */
+}
+
+/* HEADER STYLES */
+h1, h2, h3, strong, nav a{
+    font-family: 'MyF1Bold', sans-serif; /* Use the Wide font for titles */
+    text-transform: uppercase;
+}
+
+p {
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+/* IMAGE STYLE */
+.banner-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+/* NAVIGATION */
+nav a {
+    color: white;             /* Links must be white to be seen on red */
+    text-decoration: none;    /* Removes the underline */
+    font-family: 'MyF1Font', sans-serif; /* Matches the logo font */
+    font-size: 0.9rem;
+    margin-left: 15px;        /* Space between links */
+    text-transform: uppercase;
+}
+
+nav a:hover {
+    color: #000000;           /* Turns black (like a checkered flag) on hover */
+    text-decoration: underline;
+}
+
+header {
+    background-color: #e10600; /* Official F1 Red */
+    color: white;              /* Makes the "BoxBoxData" text white */
+    padding: 15px 30px;        /* Adds breathing room (Top/Bottom, Left/Right) */
+    
+    /* This aligns the Logo left and Menu right */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header strong {
+    font-family: 'MyF1Wide', sans-serif; /* Use your wide font here */
+    font-size: 1.5rem;        /* Make it bigger */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
