@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detalhes da Corrida</title>
+    <link rel="stylesheet" href="../style/style.css" />
+  </head>
+  <body>
+    <header>
+      <strong>BoxBoxData</strong>
+      <nav>
+        <a href="../index.html">Início</a>
+      </nav>
+    </header>
+
+    <main style="padding: 20px;">
+      <section class="dashboard-card">
+        <div class="card-header">
+          <h2 id="race-title">Carregando corrida...</h2>
+          <p id="race-subtitle"></p>
+        </div>
+      </section>
+
+      <section class="dashboard-card" style="max-width: 1200px; margin: 20px auto;">
+        <div class="card-header">
+          <h2>Resultado da corrida</h2>
+        </div>
+        <div class="table-responsive">
+          <table class="f1-table">
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Piloto</th>
+                <th>Equipe</th>
+                <th>Pontos</th>
+              </tr>
+            </thead>
+            <tbody id="race-results-body">
+              <!-- preenchido por race.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="../js/race.js"></script>
+  </body>
+</html>

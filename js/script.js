@@ -46,29 +46,35 @@ async function loadRealF1Calendar(year = 2025) {
     }
 
     meetings.forEach((m, index) => {
-      const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-      const roundCell = document.createElement("td");
-      roundCell.textContent = index + 1;
+    const roundCell = document.createElement("td");
+    roundCell.textContent = index + 1;
 
-      const dateCell = document.createElement("td");
-      const dateStr = m.date_start ? m.date_start.slice(0, 10) : "-";
-      dateCell.textContent = dateStr;
+    const dateCell = document.createElement("td");
+    const dateStr = m.date_start ? m.date_start.slice(0, 10) : "-";
+    dateCell.textContent = dateStr;
 
-      const gpCell = document.createElement("td");
-      gpCell.textContent = m.meeting_official_name || m.meeting_name || "-";
+    const gpCell = document.createElement("td");
+    gpCell.textContent = m.meeting_official_name || m.meeting_name || "-";
 
-      const circuitCell = document.createElement("td");
-      circuitCell.textContent =
-        m.location || m.circuit_short_name || m.country_name || "-";
+    const circuitCell = document.createElement("td");
+    circuitCell.textContent =
+      m.location || m.circuit_short_name || m.country_name || "-";
 
-      tr.appendChild(roundCell);
-      tr.appendChild(dateCell);
-      tr.appendChild(gpCell);
-      tr.appendChild(circuitCell);
+    tr.appendChild(roundCell);
+    tr.appendChild(dateCell);
+    tr.appendChild(gpCell);
+    tr.appendChild(circuitCell);
 
-      tableBody.appendChild(tr);
+  // linha inteira clicável → página da corrida
+    tr.style.cursor = "pointer";
+    tr.addEventListener("click", () => {
+      window.location.href = `pages/race.html?meeting_key=${m.meeting_key}`;
     });
+
+  tableBody.appendChild(tr);
+});
   } catch (error) {
     console.error(error);
     tableBody.innerHTML = `
@@ -196,26 +202,38 @@ async function loadSeasonStandingsTable(year = 2025) {
     }
 
     standings.forEach((driver, index) => {
-      const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-      const posCell = document.createElement("td");
-      posCell.textContent = index + 1;
+  // POS
+    const posCell = document.createElement("td");
+    posCell.textContent = index + 1;
 
-      const nameCell = document.createElement("td");
-      const info = driverMap[driver.driver_number];
-      nameCell.textContent = info
-        ? info.full_name
-        : driver.driver_number;
+  // PILOTO (com link)
+    const nameCell = document.createElement("td");
+    const info = driverMap[driver.driver_number];
+    const displayName = info ? info.full_name : driver.driver_number;
 
-      const ptsCell = document.createElement("td");
-      ptsCell.textContent = driver.points;
+    nameCell.textContent = ""; // garante vazio
 
-      tr.appendChild(posCell);
-      tr.appendChild(nameCell);
-      tr.appendChild(ptsCell);
+    const driverLink = document.createElement("a");
+    driverLink.href = `pages/driver.html?driver_number=${driver.driver_number}`;
+    driverLink.textContent = displayName;
+    driverLink.style.textDecoration = "none";
+    driverLink.style.color = "inherit";
 
-      tableBody.appendChild(tr);
-    });
+    nameCell.appendChild(driverLink);
+
+  // PTS
+    const ptsCell = document.createElement("td");
+    ptsCell.textContent = driver.points;
+
+  // Monta a linha completa
+    tr.appendChild(posCell);
+    tr.appendChild(nameCell);
+    tr.appendChild(ptsCell);
+
+    tableBody.appendChild(tr);
+});
   } catch (error) {
     console.error(error);
     tableBody.innerHTML = `

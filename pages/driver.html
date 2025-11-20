@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detalhes do Piloto</title>
+    <link rel="stylesheet" href="../style/style.css" />
+  </head>
+  <body>
+    <header>
+      <strong>BoxBoxData</strong>
+      <nav>
+        <a href="index.html">Início</a>
+      </nav>
+    </header>
+
+    <main style="padding: 20px;">
+      <div class="dashboard-grid">
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h2 id="driver-name">Carregando piloto...</h2>
+            <p id="driver-team" style="margin: 0; color: #666;"></p>
+          </div>
+
+          <div class="card-body" style="padding: 20px;">
+            <p>
+              <strong>Número:</strong> <span id="driver-number">-</span>
+            </p>
+            <p>
+              <strong>País:</strong> <span id="driver-country">-</span>
+            </p>
+          </div>
+        </section>
+
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h2>Resumo da temporada</h2>
+          </div>
+
+          <div class="card-body" style="padding: 20px;">
+            <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
+              <li>Corridas: <strong><span id="driver-races">-</span></strong></li>
+              <li>Vitórias: <strong><span id="driver-wins">-</span></strong></li>
+              <li>Pódios: <strong><span id="driver-podiums">-</span></strong></li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <section class="dashboard-card" style="max-width: 1200px; margin: 20px auto;">
+        <div class="card-header">
+          <h2>Resultados por corrida</h2>
+        </div>
+        <div class="table-responsive">
+          <table class="f1-table">
+            <thead>
+              <tr>
+                <th>GP</th>
+                <th>Pos</th>
+                <th>Pontos</th>
+              </tr>
+            </thead>
+            <tbody id="driver-results-body">
+              </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/driver.js"></script>
+  </body>
+</html>
