@@ -145,12 +145,20 @@ header strong {
 
 .dashboard-grid {
     display: grid;
-    /* The Calendar gets 2 parts of space, Standings get 1 part */
-    grid-template-columns: 2fr 1fr; 
+    grid-template-columns: 2fr 1fr;
     gap: 20px;
     padding: 0 20px 40px 20px;
     max-width: 1200px;
     margin: 0 auto;
+    
+    /* --- ADD THIS LINE --- */
+    align-items: start; 
+    /* This tells the cards: "Don't stretch! Just fit your content." */
+}
+
+.calendar-container .table-responsive {
+    max-height: 855px; /* Adjust this number as you like */
+    overflow-y: auto;  /* Adds a scrollbar inside the card */
 }
 
 /* Make it stack on mobile phones */

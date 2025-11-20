@@ -1,9 +1,16 @@
-/* --- 1. LOAD CALENDAR FROM OPENF1 API (Using /meetings) --- */
+// ---------------------------------------------------------
+// 0. Config
+// ---------------------------------------------------------
+const BASE_URL = "https://api.openf1.org/v1";
+const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
 
-async function loadRealF1Calendar() {
+
+// ---------------------------------------------------------
+// 1. Calendar (/meetings)
+// ---------------------------------------------------------
+async function loadRealF1Calendar(year = 2025) {
   const tableBody = document.getElementById("calendar-body");
 
-  // Mensagem inicial
   tableBody.innerHTML = `
     <tr>
       <td colspan="4">Carregando calendário...</td>
@@ -11,9 +18,8 @@ async function loadRealF1Calendar() {
   `;
 
   try {
-    // Buscar todos os meetings de 2025
     const response = await fetch(
-      "https://api.openf1.org/v1/meetings?year=2025"
+      `${BASE_URL}/meetings?year=${year}`
     );
 
     if (!response.ok) {
@@ -22,20 +28,18 @@ async function loadRealF1Calendar() {
 
     let meetings = await response.json();
 
-    // Ordenar por data de início (ou meeting_key como fallback)
     meetings.sort((a, b) => {
       const da = a.date_start ? new Date(a.date_start) : new Date(0);
       const db = b.date_start ? new Date(b.date_start) : new Date(0);
       return da - db;
     });
 
-    // Limpar a mensagem de "carregando"
     tableBody.innerHTML = "";
 
     if (meetings.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="4">Nenhuma corrida encontrada para 2025.</td>
+          <td colspan="4">Nenhuma corrida encontrada para ${year}.</td>
         </tr>
       `;
       return;
@@ -48,7 +52,6 @@ async function loadRealF1Calendar() {
       roundCell.textContent = index + 1;
 
       const dateCell = document.createElement("td");
-      // Pega só a parte da data (YYYY-MM-DD)
       const dateStr = m.date_start ? m.date_start.slice(0, 10) : "-";
       dateCell.textContent = dateStr;
 
@@ -74,13 +77,13 @@ async function loadRealF1Calendar() {
       </tr>
     `;
   }
-} 
-const BASE_URL = "https://api.openf1.org/v1";
-const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
+}
 
-// Busca e calcula a classificação dos pilotos para o ano
+
+// ---------------------------------------------------------
+// 2. Standings core logic (/sessions + /session_result)
+// ---------------------------------------------------------
 async function getSeasonDriverStandings(year = 2025) {
-  // 1) Buscar todas as sessões Race do ano
   const sessionsRes = await fetch(
     `${BASE_URL}/sessions?year=${year}&session_name=Race`
   );
@@ -91,7 +94,6 @@ async function getSeasonDriverStandings(year = 2025) {
 
   const standingsMap = {}; // driver_number -> { driver_number, points, races }
 
-  // 2) Para cada corrida, buscar os resultados e aplicar pontuação
   const promises = sessions.map(async (session) => {
     const sessionKey = session.session_key;
 
@@ -129,7 +131,6 @@ async function getSeasonDriverStandings(year = 2025) {
 
   await Promise.all(promises);
 
-  // 3) Transformar em array e ordenar
   const standings = Object.values(standingsMap).sort(
     (a, b) => b.points - a.points
   );
@@ -137,7 +138,37 @@ async function getSeasonDriverStandings(year = 2025) {
   return standings;
 }
 
-// Renderizar a tabela de classificação
+
+// ---------------------------------------------------------
+// 3. Driver map with names (/drivers)
+//    Simplified: just use latest session, no extra /sessions call
+// ---------------------------------------------------------
+async function getDriverMap() {
+  const driversRes = await fetch(
+    `${BASE_URL}/drivers?session_key=latest`
+  );
+  if (!driversRes.ok) {
+    throw new Error("Erro ao buscar drivers: " + driversRes.status);
+  }
+  const drivers = await driversRes.json();
+
+  const map = {};
+  drivers.forEach((d) => {
+    map[d.driver_number] = {
+      full_name: d.full_name,
+      acronym: d.name_acronym,
+      team_name: d.team_name,
+      team_colour: d.team_colour,
+    };
+  });
+
+  return map;
+}
+
+
+// ---------------------------------------------------------
+// 4. Render standings table
+// ---------------------------------------------------------
 async function loadSeasonStandingsTable(year = 2025) {
   const tableBody = document.getElementById("standings-body");
 
@@ -148,7 +179,10 @@ async function loadSeasonStandingsTable(year = 2025) {
   `;
 
   try {
-    const standings = await getSeasonDriverStandings(year);
+    const [standings, driverMap] = await Promise.all([
+      getSeasonDriverStandings(year),
+      getDriverMap(),
+    ]);
 
     tableBody.innerHTML = "";
 
@@ -168,8 +202,10 @@ async function loadSeasonStandingsTable(year = 2025) {
       posCell.textContent = index + 1;
 
       const nameCell = document.createElement("td");
-      // Por enquanto mostramos o número do carro; depois podemos trocar por nome
-      nameCell.textContent = driver.driver_number;
+      const info = driverMap[driver.driver_number];
+      nameCell.textContent = info
+        ? info.full_name
+        : driver.driver_number;
 
       const ptsCell = document.createElement("td");
       ptsCell.textContent = driver.points;
@@ -189,7 +225,12 @@ async function loadSeasonStandingsTable(year = 2025) {
     `;
   }
 }
+
+
+// ---------------------------------------------------------
+// 5. Boot
+// ---------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
-  loadRealF1Calendar();
-  loadSeasonStandingsTable();
+  loadRealF1Calendar(2025);
+  loadSeasonStandingsTable(2025);
 });
