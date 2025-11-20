@@ -1,6 +1,5 @@
 /* style/style.css */
 
-/* 1. Regular Font */
 @font-face {
     font-family: 'MyF1Font';
     src: url('../fonts/Formula1-Regular_web_0.ttf') format('truetype');
@@ -8,7 +7,6 @@
     font-style: normal;
 }
 
-/* 2. Bold Font */
 @font-face {
     font-family: 'MyF1Bold';
     src: url('../fonts/Formula1-Bold_web_0.ttf') format('truetype');
@@ -16,22 +14,19 @@
     font-style: normal;
 }
 
-/* 3. Wide Font (Optional, good for big headers) */
 @font-face {
     font-family: 'MyF1Wide';
     src: url('../fonts/Formula1-Wide_web_0.ttf') format('truetype');
 }
 
-/* BODY STYLES */
 body {
     margin: 0;
     background-color: #f1f1f1;
-    font-family: 'Arial', sans-serif;/* Uses the font we defined above */
+    font-family: 'Arial', sans-serif;
 }
 
-/* HEADER STYLES */
 h1, h2, h3, strong, nav a{
-    font-family: 'MyF1Bold', sans-serif; /* Use the Wide font for titles */
+    font-family: 'MyF1Bold', sans-serif; 
     text-transform: uppercase;
 }
 
@@ -40,7 +35,6 @@ p {
     margin: 15px 0;
 }
 
-/* IMAGE STYLE */
 .banner-img {
     width: 100%;
     height: 300px;
@@ -48,35 +42,103 @@ p {
     display: block;
 }
 
-/* NAVIGATION */
 nav a {
-    color: white;             /* Links must be white to be seen on red */
-    text-decoration: none;    /* Removes the underline */
-    font-family: 'MyF1Font', sans-serif; /* Matches the logo font */
+    color: white;
+    text-decoration: none;
+    font-family: 'MyF1Font', sans-serif; 
     font-size: 0.9rem;
-    margin-left: 15px;        /* Space between links */
+    margin-left: 15px; 
     text-transform: uppercase;
 }
 
 nav a:hover {
-    color: #000000;           /* Turns black (like a checkered flag) on hover */
+    color: #000000;
     text-decoration: underline;
 }
 
 header {
-    background-color: #e10600; /* Official F1 Red */
-    color: white;              /* Makes the "BoxBoxData" text white */
-    padding: 15px 30px;        /* Adds breathing room (Top/Bottom, Left/Right) */
+    background-color: #e10600;
+    color: white;
+    padding: 15px 30px; 
     
-    /* This aligns the Logo left and Menu right */
+    
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 header strong {
-    font-family: 'MyF1Wide', sans-serif; /* Use your wide font here */
-    font-size: 1.5rem;        /* Make it bigger */
+    font-family: 'MyF1Wide', sans-serif;
+    font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* --- Action Cards Grid --- */
+.actions-grid {
+    display: flex;
+    justify-content: space-between; /* Spreads them out evenly */
+    gap: 20px;                      /* Gap between cards */
+    padding: 40px 20px;             /* Spacing around the whole section */
+    max-width: 1200px;              /* Stops them getting too wide on huge screens */
+    margin: 0 auto;                 /* Centers the section */
+    flex-wrap: wrap;                /* Allows cards to stack on mobile phones */
+}
+
+/* --- Individual Card Style --- */
+.action-card {
+    flex: 1;                        /* Makes all 3 cards same width */
+    min-width: 250px;               /* Minimum width before stacking */
+    background: white;
+    border-radius: 15px;            /* Rounded corners */
+    text-decoration: none;          /* Removes underline from links */
+    color: black;
+    
+    /* The F1 Look: Border on the Left and slight Shadow */
+    border-left: 5px solid #e10600; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    
+    /* Animation Transition */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+/* Inner Padding */
+.action-card .card-content {
+    padding: 30px;
+    display: flex;
+    justify-content: space-between; /* Pushes text left, arrow right */
+    align-items: center;
+}
+
+/* Typography */
+.action-card h3 {
+    font-family: 'MyF1Font', sans-serif; /* Your Custom Font */
+    font-size: 1.2rem;
+    margin: 0;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+/* The Arrow Styling */
+.action-card .arrow {
+    font-size: 1.5rem;
+    color: #e10600;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+/* --- Hover Effects (The "Pop") --- */
+.action-card:hover {
+    transform: translateY(-5px);       /* Moves card up slightly */
+    box-shadow: 0 10px 25px rgba(225, 6, 0, 0.15); /* Reddish shadow */
+    background-color: #15151e;         /* Turns Dark on hover */
+}
+
+.action-card:hover h3 {
+    color: white;                      /* Text turns white */
+}
+
+.action-card:hover .arrow {
+    transform: translateX(10px);        /* Arrow moves right */
 }
