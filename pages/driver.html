@@ -7,9 +7,9 @@
   </head>
   <body>
     <header>
-      <strong>BoxBoxData</strong>
+      <strong>BOXBOXDATA</strong>
       <nav>
-        <a href="index.html">Início</a>
+        <a href="../index.html">Início</a>
       </nav>
     </header>
 
@@ -18,16 +18,11 @@
         <section class="dashboard-card">
           <div class="card-header">
             <h2 id="driver-name">Carregando piloto...</h2>
-            <p id="driver-team" style="margin: 0; color: #666;"></p>
+            <p id="driver-team"></p>
           </div>
-
           <div class="card-body" style="padding: 20px;">
-            <p>
-              <strong>Número:</strong> <span id="driver-number">-</span>
-            </p>
-            <p>
-              <strong>País:</strong> <span id="driver-country">-</span>
-            </p>
+            <p>Número do carro: <span id="driver-number">-</span></p>
+            <p>País: <span id="driver-country">-</span></p>
           </div>
         </section>
 
@@ -35,13 +30,10 @@
           <div class="card-header">
             <h2>Resumo da temporada</h2>
           </div>
-
           <div class="card-body" style="padding: 20px;">
-            <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
-              <li>Corridas: <strong><span id="driver-races">-</span></strong></li>
-              <li>Vitórias: <strong><span id="driver-wins">-</span></strong></li>
-              <li>Pódios: <strong><span id="driver-podiums">-</span></strong></li>
-            </ul>
+            <p>Corridas: <span id="driver-races">-</span></p>
+            <p>Vitórias: <span id="driver-wins">-</span></p>
+            <p>Pódios: <span id="driver-podiums">-</span></p>
           </div>
         </section>
       </div>
@@ -60,12 +52,14 @@
               </tr>
             </thead>
             <tbody id="driver-results-body">
-              </tbody>
+              <!-- preenchido via driver.js -->
+            </tbody>
           </table>
         </div>
       </section>
     </main>
 
-    <script src="js/driver.js"></script>
+    <!-- IMPORTANTE: esse caminho precisa bater com a pasta real -->
+    <script src="../js/drivers.js"></script>
   </body>
 </html>
