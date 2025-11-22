@@ -16,6 +16,21 @@
   </header>
 
   <main style="padding: 20px;">
+    <section class="dashboard-card" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <h2>Buscar piloto</h2>
+      </div>
+      <div class="card-body" style="padding: 20px;">
+        <form id="driver-search-form" class="driver-search-form">
+          <label for="driver-select">Selecione o piloto:</label>
+          <select id="driver-select">
+            <option value="">-- escolha um piloto --</option>
+            <!-- options preenchidas via JS -->
+          </select>
+          <button type="submit">Ver detalhes</button>
+        </form>
+      </div>
+    </section>
     <div class="dashboard-grid">
       <section class="dashboard-card">
         <div class="card-header">

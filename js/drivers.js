@@ -13,7 +13,47 @@ if (!driverNumber) {
   }
   console.error("driver_number ausente na URL");
 }
+async function populateDriverSelect() {
+  const select = document.getElementById("driver-select");
+  if (!select) return;
 
+  try {
+    const res = await fetch(`${BASE_URL}/drivers?session_key=latest`);
+    if (!res.ok) {
+      console.error("Erro ao buscar lista de pilotos:", res.status);
+      return;
+    }
+    const drivers = await res.json();
+
+    // ordenar por número do carro
+    drivers.sort((a, b) => a.driver_number - b.driver_number);
+
+    drivers.forEach((d) => {
+      const option = document.createElement("option");
+      option.value = d.driver_number;
+      option.textContent = `${d.driver_number} – ${d.full_name}`;
+      select.appendChild(option);
+    });
+  } catch (e) {
+    console.error("Erro em populateDriverSelect:", e);
+  }
+}
+
+// 2. Form submit → redirecionar para driver.html com o número escolhido
+function setupDriverSearchForm() {
+  const form = document.getElementById("driver-search-form");
+  const select = document.getElementById("driver-select");
+  if (!form || !select) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const value = select.value;
+    if (!value) return;
+
+    // redireciona para a mesma página com outro driver_number
+    window.location.href = `driver.html?driver_number=${value}`;
+  });
+}
 // 2. Info básica do piloto
 async function loadDriverInfo() {
   if (!driverNumber) return;
@@ -182,5 +222,7 @@ loadDriverInfo().catch((e) => {
 });
 
 loadDriverSeasonStats().catch((e) => {
+  populateDriverSelect().catch(console.error);
+  setupDriverSearchForm();
   console.error("Erro em loadDriverSeasonStats:", e);
 });

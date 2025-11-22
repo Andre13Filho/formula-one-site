@@ -263,3 +263,17 @@ header strong {
   object-fit: contain;
 }
 
+.driver-search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.driver-search-form select,
+.driver-search-form button {
+  padding: 6px 10px;
+  font-family: 'MyF1Font', sans-serif;
+  font-size: 0.9rem;
+}
+
