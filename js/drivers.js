@@ -43,10 +43,49 @@ async function loadDriverInfo() {
   }
 
   const d = data[0];
+
   document.getElementById("driver-name").textContent = d.full_name;
   document.getElementById("driver-team").textContent = d.team_name || "-";
   document.getElementById("driver-number").textContent = d.driver_number;
   document.getElementById("driver-country").textContent = d.country_code || "-";
+
+  const TEAM_LOGOS = {
+    "Red Bull Racing": "red-bull.png",
+    "Mercedes": "mercedes.png",
+    "Ferrari": "ferrari.png",
+    "McLaren": "mclaren.png",
+    "Aston Martin": "aston-martin.png",
+    "Williams": "williams.png",
+    "Haas F1 Team": "haas.png",
+    "Kick Sauber": "sauber.png",
+    "Alpine": "alpine.png",
+    "Racing Bulls": "racing-bulls.png",
+  };
+
+
+  // NOVO: foto
+  const img = document.getElementById("driver-photo");
+  if (img) {
+    const localSrc = `../style/images/drivers/${d.driver_number}.png`;
+    img.src = d.headshot_url || localSrc;
+  }
+
+  const teamName = d.team_name || "-";
+  document.getElementById("driver-team").textContent = teamName;
+
+  const logoImg = document.getElementById("team-logo");
+  if (logoImg && d.team_name) {
+    const fileName = TEAM_LOGOS[teamName];
+    if (fileName) {
+      logoImg.src = `../images/teams/${fileName}`;
+      logoImg.alt = teamName;
+    } else {
+      // fallback: show a generic icon or hide the img
+      logoImg.style.display = "none";
+    }
+  }
+
+
 }
 
 // 3. Stats da temporada + resultados por corrida
@@ -87,25 +126,29 @@ async function loadDriverSeasonStats(year = 2025) {
     const res = await fetch(
       `${BASE_URL}/session_result?session_key=${session.session_key}&driver_number=${driverNumber}`
     );
-    if (!res.ok) {
-      console.warn("Erro em /session_result para", session.session_key, res.status);
-      return;
-    }
+    if (!res.ok) return;
+
     const data = await res.json();
     if (!data.length) return;
 
     const r = data[0];
+
     races += 1;
     if (r.position === 1) wins += 1;
     if (r.position >= 1 && r.position <= 3) podiums += 1;
 
     rows.push({
-      gp: session.meeting_name,
+      gp:
+        session.meeting_official_name ||
+        session.meeting_name ||
+        `${session.location || ""} ${session.country_name || ""}`.trim() ||
+        `GP ${session.meeting_key}`,
       position: r.position,
       points: r.points ?? "-",
     });
   });
 
+  // ← fora do map, ainda dentro da função
   await Promise.all(promises);
 
   document.getElementById("driver-races").textContent = races;

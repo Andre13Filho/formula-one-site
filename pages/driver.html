@@ -1,65 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Detalhes do Piloto</title>
-    <link rel="stylesheet" href="../style/style.css" />
-  </head>
-  <body>
-    <header>
-      <strong>BOXBOXDATA</strong>
-      <nav>
-        <a href="../index.html">Início</a>
-      </nav>
-    </header>
 
-    <main style="padding: 20px;">
-      <div class="dashboard-grid">
-        <section class="dashboard-card">
-          <div class="card-header">
-            <h2 id="driver-name">Carregando piloto...</h2>
-            <p id="driver-team"></p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Detalhes do Piloto</title>
+  <link rel="stylesheet" href="../style/style.css" />
+</head>
+
+<body>
+  <header>
+    <strong>BOXBOXDATA</strong>
+    <nav>
+      <a href="../index.html">Início</a>
+    </nav>
+  </header>
+
+  <main style="padding: 20px;">
+    <div class="dashboard-grid">
+      <section class="dashboard-card">
+        <div class="card-header">
+          <h2 id="driver-name">Carregando piloto...</h2>
+          <p id="driver-team"></p>
+        </div>
+        <div class="driver-team-row">
+          <img id="team-logo" class="team-logo" src="" alt="" />
+          <p id="driver-team"></p>
+        </div>
+        <div class="card-body driver-header">
+          <img id="driver-photo" class="driver-photo" src="../images/driver-placeholder.png" alt="Foto do piloto" />
           <div class="card-body" style="padding: 20px;">
             <p>Número do carro: <span id="driver-number">-</span></p>
             <p>País: <span id="driver-country">-</span></p>
           </div>
-        </section>
+      </section>
 
-        <section class="dashboard-card">
-          <div class="card-header">
-            <h2>Resumo da temporada</h2>
-          </div>
-          <div class="card-body" style="padding: 20px;">
-            <p>Corridas: <span id="driver-races">-</span></p>
-            <p>Vitórias: <span id="driver-wins">-</span></p>
-            <p>Pódios: <span id="driver-podiums">-</span></p>
-          </div>
-        </section>
-      </div>
-
-      <section class="dashboard-card" style="max-width: 1200px; margin: 20px auto;">
+      <section class="dashboard-card">
         <div class="card-header">
-          <h2>Resultados por corrida</h2>
+          <h2>Resumo da temporada</h2>
         </div>
-        <div class="table-responsive">
-          <table class="f1-table">
-            <thead>
-              <tr>
-                <th>GP</th>
-                <th>Pos</th>
-                <th>Pontos</th>
-              </tr>
-            </thead>
-            <tbody id="driver-results-body">
-              <!-- preenchido via driver.js -->
-            </tbody>
-          </table>
+        <div class="card-body" style="padding: 20px;">
+          <p>Corridas: <span id="driver-races">-</span></p>
+          <p>Vitórias: <span id="driver-wins">-</span></p>
+          <p>Pódios: <span id="driver-podiums">-</span></p>
         </div>
       </section>
-    </main>
+    </div>
 
-    <!-- IMPORTANTE: esse caminho precisa bater com a pasta real -->
-    <script src="../js/drivers.js"></script>
-  </body>
+    <section class="dashboard-card" style="max-width: 1200px; margin: 20px auto;">
+      <div class="card-header">
+        <h2>Resultados por corrida</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="f1-table">
+          <thead>
+            <tr>
+              <th>GP</th>
+              <th>Pos</th>
+              <th>Pontos</th>
+            </tr>
+          </thead>
+          <tbody id="driver-results-body">
+            <!-- preenchido via driver.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- IMPORTANTE: esse caminho precisa bater com a pasta real -->
+  <script src="../js/drivers.js"></script>
+</body>
+
 </html>
