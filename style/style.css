@@ -581,9 +581,6 @@ header strong {
   z-index: 2;          /* acima do overlay */
 }
 
-
-
-
 .hero-text h1 {
   margin: 0 0 10px;
   font-size: 2.2rem;
@@ -594,3 +591,57 @@ header strong {
   font-size: 0.95rem;
 }
 
+.driver-search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.driver-search-form select,
+.driver-search-form button {
+  padding: 6px 10px;
+  font-family: 'MyF1Font', sans-serif;
+  font-size: 0.9rem;
+}
+
+.drivers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.driver-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.driver-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.driver-card img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eee;
+}
+
+.driver-card-info h3 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.driver-card-info p {
+  margin: 0;
+  font-size: 0.8rem;
+}
