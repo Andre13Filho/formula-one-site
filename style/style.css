@@ -498,3 +498,52 @@ header strong {
   display: block;
   border-radius: 12px;
 }
+
+.circuit-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.circuit-image-wrapper {
+  flex: 1 1 320px;
+}
+
+.circuit-info-wrapper {
+  flex: 1 1 260px;
+}
+
+.circuit-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.circuit-info-wrapper h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+#circuit-info-body p {
+  margin: 4px 0;
+}
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.clickable-row:hover {
+  background-color: #f3f3f3;
+}
+
+/* table already collapses nicely; for very small screens you can tweak: */
+@media (max-width: 600px) {
+  .f1-table td,
+  .f1-table th {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+}

@@ -9,7 +9,7 @@ const CIRCUITS = [
     laps: 58,
     lap_length_km: 5.278,
     race_distance_km: 306.124,
-    image: "Australia_Circuit.avif",
+    image: "Australia_Circuit.jpg",
   },
   {
     slug: "china",
@@ -19,7 +19,7 @@ const CIRCUITS = [
     laps: 56,
     lap_length_km: 5.451,
     race_distance_km: 305.066,
-    image: "China_Circuit.avif",
+    image: "China_Circuit.jpg",
   },
   {
     slug: "japan",
@@ -29,7 +29,7 @@ const CIRCUITS = [
     laps: 53,
     lap_length_km: 5.807,
     race_distance_km: 307.471,
-    image: "Japan_Circuit.avif",
+    image: "Japan_Circuit.jpg",
   },
   {
     slug: "bahrain",
@@ -39,7 +39,7 @@ const CIRCUITS = [
     laps: 57,
     lap_length_km: 5.412,
     race_distance_km: 308.238,
-    image: "Bahrain_Circuit.avif",
+    image: "Bahrain_Circuit.jpg",
   },
   {
     slug: "saudi-arabia",
@@ -49,7 +49,7 @@ const CIRCUITS = [
     laps: 50,
     lap_length_km: 6.174,
     race_distance_km: 308.450,
-    image: "Saudi_Arabia_Circuit.avif",
+    image: "Saudi_Arabia_Circuit.jpg",
   },
   {
     slug: "miami",
@@ -59,7 +59,7 @@ const CIRCUITS = [
     laps: 57,
     lap_length_km: 5.412,
     race_distance_km: 308.326,
-    image: "Miami_Circuit.avif",
+    image: "Miami_Circuit.jpg",
   },
   {
     slug: "emilia-romagna",
@@ -69,7 +69,7 @@ const CIRCUITS = [
     laps: 63,
     lap_length_km: 4.909,
     race_distance_km: 309.049,
-    image: "Emilia_Romagna_Circuit.avif",
+    image: "Emilia_Romagna_Circuit.jpg",
   },
   {
     slug: "monaco",
@@ -79,7 +79,7 @@ const CIRCUITS = [
     laps: 78,
     lap_length_km: 3.337,
     race_distance_km: 260.286,
-    image: "Monaco_Circuit.avif",
+    image: "Monaco_Circuit.jpg",
   },
   {
     slug: "spain",
@@ -89,7 +89,7 @@ const CIRCUITS = [
     laps: 66,
     lap_length_km: 4.657,
     race_distance_km: 307.236,
-    image: "Spain_Circuit.avif",
+    image: "Spain_Circuit.jpg",
   },
   {
     slug: "canada",
@@ -99,7 +99,7 @@ const CIRCUITS = [
     laps: 70,
     lap_length_km: 4.361,
     race_distance_km: 305.270,
-    image: "Canada_Circuit.avif",
+    image: "Canada_Circuit.jpg",
   },
   {
     slug: "austria",
@@ -109,7 +109,7 @@ const CIRCUITS = [
     laps: 71,
     lap_length_km: 4.318,
     race_distance_km: 306.452,
-    image: "Austria_Circuit.avif",
+    image: "Austria_Circuit.jpg",
   },
   {
     slug: "great-britain",
@@ -119,7 +119,7 @@ const CIRCUITS = [
     laps: 52,
     lap_length_km: 5.891,
     race_distance_km: 306.198,
-    image: "Great_Britain_Circuit.avif",
+    image: "Great_Britain_Circuit.jpg",
   },
   {
     slug: "belgium",
@@ -129,7 +129,7 @@ const CIRCUITS = [
     laps: 44,
     lap_length_km: 7.004,
     race_distance_km: 308.052,
-    image: "Belgium_Circuit.avif",
+    image: "Belgium_Circuit.jpg",
   },
   {
     slug: "hungary",
@@ -139,7 +139,7 @@ const CIRCUITS = [
     laps: 70,
     lap_length_km: 4.381,
     race_distance_km: 306.630,
-    image: "Hungary_Circuit.avif",
+    image: "Hungary_Circuit.jpg",
   },
   {
     slug: "netherlands",
@@ -149,7 +149,7 @@ const CIRCUITS = [
     laps: 72,
     lap_length_km: 4.259,
     race_distance_km: 306.587,
-    image: "Netherlands_Circuit.avif",
+    image: "Netherlands_Circuit.jpg",
   },
   {
     slug: "italy-monza",
@@ -159,7 +159,7 @@ const CIRCUITS = [
     laps: 53,
     lap_length_km: 5.793,
     race_distance_km: 306.720,
-    image: "Italy_Circuit.avif",
+    image: "Italy_Circuit.jpg",
   },
   {
     slug: "azerbaijan",
@@ -169,7 +169,7 @@ const CIRCUITS = [
     laps: 51,
     lap_length_km: 6.003,
     race_distance_km: 306.049,
-    image: "Baku_Circuit.avif",
+    image: "Baku_Circuit.jpg",
   },
   {
     slug: "singapore",
@@ -179,7 +179,7 @@ const CIRCUITS = [
     laps: 61,
     lap_length_km: 5.063,
     race_distance_km: 308.706,
-    image: "Singapore_Circuit.avif",
+    image: "Singapore_Circuit.jpg",
   },
   {
     slug: "usa-cota",
@@ -189,7 +189,7 @@ const CIRCUITS = [
     laps: 56,
     lap_length_km: 5.513,
     race_distance_km: 308.405,
-    image: "USA_Circuit.avif",
+    image: "USA_Circuit.jpg",
   },
   {
     slug: "mexico",
@@ -199,7 +199,7 @@ const CIRCUITS = [
     laps: 71,
     lap_length_km: 4.304,
     race_distance_km: 305.354,
-    image: "Mexico_Circuit.avif",
+    image: "Mexico_Circuit.jpg",
   },
   {
     slug: "brazil",
@@ -209,7 +209,7 @@ const CIRCUITS = [
     laps: 71,
     lap_length_km: 4.309,
     race_distance_km: 305.879,
-    image: "Brazil_Circuit.avif",
+    image: "Brazil_Circuit.jpg",
   },
   {
     slug: "las-vegas",
@@ -219,7 +219,7 @@ const CIRCUITS = [
     laps: 50,
     lap_length_km: 6.201,
     race_distance_km: 310.050,
-    image: "Las_Vegas_Circuit.avif",
+    image: "Las_Vegas_Circuit.jpg",
   },
   {
     slug: "qatar",
@@ -229,7 +229,7 @@ const CIRCUITS = [
     laps: 57,
     lap_length_km: 5.419,
     race_distance_km: 308.611,
-    image: "Qatar_Circuit.avif",
+    image: "Qatar_Circuit.jpg",
   },
   {
     slug: "abu-dhabi",
@@ -239,7 +239,7 @@ const CIRCUITS = [
     laps: 58,
     lap_length_km: 5.281,
     race_distance_km: 306.183,
-    image: "Abu_Dhabi_Circuit.avif",
+    image: "Abu_Dhabi_Circuit.jpg",
   },
 ];
 
@@ -254,7 +254,7 @@ function renderCircuitsGrid() {
     card.className = "circuit-card";
 
     const img = document.createElement("img");
-    img.src = `../style/images/circuits-images/${circuit.image}`;
+    img.src = `../style/images/circuits-images/logos/${circuit.image}`;
     img.alt = circuit.title;
 
     const nameDiv = document.createElement("div");

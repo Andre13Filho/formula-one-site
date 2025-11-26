@@ -33,78 +33,122 @@ async function loadRaceInfo() {
 // 3. Buscar sessão de corrida e resultado (/sessions + /session_result + /drivers)
 async function loadRaceResults() {
   const tableBody = document.getElementById("race-results-body");
-
   tableBody.innerHTML = `
-    <tr>
-      <td colspan="4">Carregando resultado...</td>
-    </tr>
+    <tr><td colspan="7">Carregando resultado...</td></tr>
   `;
 
-  // pegar a sessão Race desse meeting
-  const sessionsRes = await fetch(
-    `${BASE_URL}/sessions?meeting_key=${meetingKey}&session_name=Race`
-  );
-  if (!sessionsRes.ok) {
-    tableBody.innerHTML = `<tr><td colspan="4">Erro ao buscar sessão Race.</td></tr>`;
-    return;
+  try {
+    // 1) achar a sessão Race desse meeting
+    const sessionsRes = await fetch(
+      `${BASE_URL}/sessions?meeting_key=${meetingKey}&session_name=Race`
+    );
+    if (!sessionsRes.ok) {
+      throw new Error("Erro ao buscar sessões: " + sessionsRes.status);
+    }
+    const sessions = await sessionsRes.json();
+    if (!sessions.length) {
+      tableBody.innerHTML = `
+        <tr><td colspan="7">Nenhuma sessão Race encontrada.</td></tr>
+      `;
+      return;
+    }
+
+    const raceSessionKey = sessions[0].session_key;
+
+    // 2) resultados da corrida
+    const resultRes = await fetch(
+      `${BASE_URL}/session_result?session_key=${raceSessionKey}`
+    );
+    if (!resultRes.ok) {
+      throw new Error("Erro ao buscar resultado: " + resultRes.status);
+    }
+    const results = await resultRes.json();
+
+    // 3) mapa de drivers para nomes/equipes
+    const driversRes = await fetch(
+      `${BASE_URL}/drivers?session_key=${raceSessionKey}`
+    );
+    const drivers = await driversRes.json();
+    const driverMap = {};
+    drivers.forEach((d) => {
+      driverMap[d.driver_number] = {
+        full_name: d.full_name,
+        team_name: d.team_name,
+      };
+    });
+
+    // 4) montar tabela
+    tableBody.innerHTML = "";
+    if (!results.length) {
+      tableBody.innerHTML = `
+        <tr><td colspan="7">Nenhum resultado encontrado.</td></tr>
+      `;
+      return;
+    }
+
+    let winnerTime = null;
+    if (results.length && results[0].time) {
+      winnerTime = results[0].time;
+    }
+
+    results.forEach((row, index) => {
+      const tr = document.createElement("tr");
+
+      const posCell = document.createElement("td");
+      posCell.textContent = row.position;
+
+      const numCell = document.createElement("td");
+      numCell.textContent = row.driver_number;
+
+      const nameCell = document.createElement("td");
+      const info = driverMap[row.driver_number];
+      nameCell.textContent = info ? info.full_name : row.driver_number;
+
+      const teamCell = document.createElement("td");
+      teamCell.textContent = info ? info.team_name : "-";
+
+      const lapsCell = document.createElement("td");
+      lapsCell.textContent = row.laps_completed ?? row.laps ?? "-";
+
+      const timeCell = document.createElement("td");
+      let timeText = "-";
+
+      if (row.status && row.status !== "Finished") {
+        timeText = row.status;
+      } else if (row.time) {
+        timeText = row.time;
+      } else if (row.gap_to_leader) {
+        timeText = `+${row.gap_to_leader}s`;
+      } else if (row.laps_behind && row.laps_behind > 0) {
+        timeText = `${row.laps_behind} LAP`;
+      } else if (index === 0 && winnerTime) {
+        timeText = winnerTime;
+      }
+
+      timeCell.textContent = timeText;
+
+      const ptsCell = document.createElement("td");
+      ptsCell.textContent = row.points ?? "-";
+
+      tr.appendChild(posCell);
+      tr.appendChild(numCell);
+      tr.appendChild(nameCell);
+      tr.appendChild(teamCell);
+      tr.appendChild(lapsCell);
+      tr.appendChild(timeCell);
+      tr.appendChild(ptsCell);
+
+      tableBody.appendChild(tr);
+    });
+
+  } catch (e) {
+    console.error(e);
+    tableBody.innerHTML = `
+      <tr><td colspan="7">Erro ao carregar resultado.</td></tr>
+    `;
   }
-  const sessions = await sessionsRes.json();
-  if (!sessions.length) {
-    tableBody.innerHTML = `<tr><td colspan="4">Nenhuma sessão Race encontrada.</td></tr>`;
-    return;
-  }
-
-  const raceSessionKey = sessions[0].session_key;
-
-  // resultado da corrida
-  const resultRes = await fetch(
-    `${BASE_URL}/session_result?session_key=${raceSessionKey}`
-  );
-  if (!resultRes.ok) {
-    tableBody.innerHTML = `<tr><td colspan="4">Erro ao buscar resultado.</td></tr>`;
-    return;
-  }
-  const results = await resultRes.json();
-
-  // mapa de drivers para nomes/equipes
-  const driversRes = await fetch(
-    `${BASE_URL}/drivers?session_key=${raceSessionKey}`
-  );
-  const drivers = await driversRes.json();
-  const driverMap = {};
-  drivers.forEach((d) => {
-    driverMap[d.driver_number] = {
-      full_name: d.full_name,
-      team_name: d.team_name,
-    };
-  });
-
-  tableBody.innerHTML = "";
-
-  results.forEach((row) => {
-    const tr = document.createElement("tr");
-
-    const posCell = document.createElement("td");
-    posCell.textContent = row.position;
-
-    const nameCell = document.createElement("td");
-    const info = driverMap[row.driver_number];
-    nameCell.textContent = info ? info.full_name : row.driver_number;
-
-    const teamCell = document.createElement("td");
-    teamCell.textContent = info ? info.team_name : "-";
-
-    const pointsCell = document.createElement("td");
-    pointsCell.textContent = row.points !== undefined ? row.points : "-";
-
-    tr.appendChild(posCell);
-    tr.appendChild(nameCell);
-    tr.appendChild(teamCell);
-    tr.appendChild(pointsCell);
-
-    tableBody.appendChild(tr);
-  });
 }
+
 
 // 4. Inicializar página
 loadRaceInfo().catch(console.error);

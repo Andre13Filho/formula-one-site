@@ -17,15 +17,28 @@
     </header>
 
     <main style="padding: 20px;">
-        <section class="dashboard-card" style="margin-top: 20px;">
+        <!-- Cabeçalho + imagem + info lado a lado -->
+        <section class="dashboard-card">
             <div class="card-header">
-                <h2>Informações do circuito</h2>
+                <h2 id="circuit-title">Carregando circuito...</h2>
+                <p id="circuit-subtitle"></p>
             </div>
-            <div class="card-body" id="circuit-info-body">
-                <!-- preenchido pelo circuit.js -->
+
+            <div class="card-body circuit-top">
+                <div class="circuit-image-wrapper">
+                    <img id="circuit-image" class="circuit-image" src="" alt="" />
+                </div>
+
+                <div class="circuit-info-wrapper">
+                    <h3>Informações do circuito</h3>
+                    <div id="circuit-info-body">
+                        <!-- preenchido pelo circuit.js -->
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Últimas corridas abaixo -->
         <section class="dashboard-card" style="max-width: 1200px; margin-top: 20px;">
             <div class="card-header">
                 <h2>Últimas corridas neste circuito</h2>
@@ -45,8 +58,9 @@
                 </table>
             </div>
         </section>
-
     </main>
+
+
 
     <script src="../js/circuit.js"></script>
 </body>

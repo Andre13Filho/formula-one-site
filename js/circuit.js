@@ -263,22 +263,22 @@ function getCircuitFromUrl() {
 }
 
 function renderCircuitInfo(circuit) {
-  const infoBody = document.getElementById("circuit-info-body");
-  if (!infoBody) return;
+    const infoBody = document.getElementById("circuit-info-body");
+    if (!infoBody) return;
 
-  infoBody.innerHTML = `
+    infoBody.innerHTML = `
+    <p><strong>País:</strong> ${circuit.country_name || "-"}</p>
     <p><strong>Cidade:</strong> ${circuit.city || "-"}</p>
     <p><strong>Voltas da corrida:</strong> ${circuit.laps || "-"} </p>
-    <p><strong>Extensão da volta:</strong> ${
-      circuit.lap_length_km ? `${circuit.lap_length_km.toFixed(3)} km` : "-"
-    }</p>
-    <p><strong>Distância total:</strong> ${
-      circuit.race_distance_km
-        ? `${circuit.race_distance_km.toFixed(3)} km`
-        : "-"
-    }</p>
+    <p><strong>Extensão da volta:</strong> ${circuit.lap_length_km ? `${circuit.lap_length_km.toFixed(3)} km` : "-"
+        }</p>
+    <p><strong>Distância total:</strong> ${circuit.race_distance_km
+            ? `${circuit.race_distance_km.toFixed(3)} km`
+            : "-"
+        }</p>
   `;
 }
+
 
 
 async function loadCircuitPage() {
@@ -293,7 +293,6 @@ async function loadCircuitPage() {
     }
 
     titleEl.textContent = circuit.title;
-    subtitleEl.textContent = circuit.country_name;
     imgEl.src = `../style/images/circuits-images/${circuit.image}`;
     renderCircuitInfo(circuit);
     await loadLastRacesForCircuit(circuit.country_name);
@@ -344,7 +343,9 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
                     year: m.year,
                     name: m.meeting_name,
                     winner: winner ? winner.full_name || winner.broadcast_name : "-",
+                    meeting_key: m.meeting_key,
                 });
+
             })
         );
 
@@ -358,6 +359,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
             .sort((a, b) => b.year - a.year)
             .forEach((row) => {
                 const tr = document.createElement("tr");
+                tr.classList.add("clickable-row");
 
                 const yearCell = document.createElement("td");
                 yearCell.textContent = row.year;
@@ -372,8 +374,14 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
                 tr.appendChild(nameCell);
                 tr.appendChild(winnerCell);
 
+                // clique → página da corrida
+                tr.addEventListener("click", () => {
+                    window.location.href = `race.html?meeting_key=${row.meeting_key}`;
+                });
+
                 body.appendChild(tr);
             });
+
     } catch (e) {
         console.error(e);
         body.innerHTML = `<tr><td colspan="3">Erro ao carregar corridas.</td></tr>`;
