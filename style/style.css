@@ -548,3 +548,49 @@ header strong {
     font-size: 0.75rem;
   }
 }
+
+.hero {
+  position: relative;
+  max-height: 450px;
+  overflow: hidden;
+}
+
+/* full banner size */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0, 0, 0, 0.55); /* preto suave em todo o banner */
+  z-index: 1;
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* text on top of the overlay */
+.hero-text {
+  position: absolute;
+  left: 5%;
+  bottom: 10%;
+  max-width: 50%;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  z-index: 2;          /* acima do overlay */
+}
+
+
+
+
+.hero-text h1 {
+  margin: 0 0 10px;
+  font-size: 2.2rem;
+}
+
+.hero-text p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
