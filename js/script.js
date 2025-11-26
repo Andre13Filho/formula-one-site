@@ -245,6 +245,62 @@ async function loadSeasonStandingsTable(year = 2025) {
   }
 }
 
+// ---------------------------------------------------------
+// 6. "Ver última corrida" -> ir para a última Race
+// ---------------------------------------------------------
+async function goToLastRace(year = 2025) {
+  try {
+    const card = document.getElementById("last-race-card");
+    if (!card) return;
+
+    // opcional: estado visual
+    card.classList.add("loading");
+
+    // todas as sessões Race do ano
+    const res = await fetch(
+      `${BASE_URL}/sessions?year=${year}&session_name=Race`
+    );
+    if (!res.ok) {
+      throw new Error("Erro ao buscar sessões: " + res.status);
+    }
+
+    const sessions = await res.json();
+    if (!sessions.length) {
+      alert(`Nenhuma corrida encontrada para ${year}.`);
+      return;
+    }
+
+    // ordenar pela data de início e pegar a última
+    sessions.sort(
+      (a, b) => new Date(a.date_start) - new Date(b.date_start)
+    );
+    const lastSession = sessions[sessions.length - 1];
+
+    if (!lastSession.meeting_key) {
+      alert("Não foi possível identificar a última corrida.");
+      return;
+    }
+
+    // abre a sua página de corrida existente
+    window.location.href = `pages/race.html?meeting_key=${lastSession.meeting_key}`;
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao abrir a última corrida.");
+  }
+}
+
+function setupLastRaceLink() {
+  const card = document.getElementById("last-race-card");
+  if (!card) return;
+
+  card.style.cursor = "pointer";
+  card.addEventListener("click", (event) => {
+    event.preventDefault();
+    goToLastRace(2025);
+  });
+}
+
+
 
 // ---------------------------------------------------------
 // 5. Boot
@@ -252,4 +308,5 @@ async function loadSeasonStandingsTable(year = 2025) {
 document.addEventListener("DOMContentLoaded", () => {
   loadRealF1Calendar(2025);
   loadSeasonStandingsTable(2025);
+  setupLastRaceLink();
 });
