@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Detalhes do Circuito</title>
+    <link rel="stylesheet" href="../style/style.css" />
+</head>
+
+<body>
+    <header>
+        <strong>BOXBOXDATA</strong>
+        <nav>
+            <a href="../index.html">Início</a>
+            <a href="circuits.html">Circuitos</a>
+        </nav>
+    </header>
+
+    <main style="padding: 20px;">
+        <section class="dashboard-card" style="margin-top: 20px;">
+            <div class="card-header">
+                <h2>Informações do circuito</h2>
+            </div>
+            <div class="card-body" id="circuit-info-body">
+                <!-- preenchido pelo circuit.js -->
+            </div>
+        </section>
+
+        <section class="dashboard-card" style="max-width: 1200px; margin-top: 20px;">
+            <div class="card-header">
+                <h2>Últimas corridas neste circuito</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="f1-table">
+                    <thead>
+                        <tr>
+                            <th>Ano</th>
+                            <th>Grand Prix</th>
+                            <th>Vencedor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="circuit-races-body">
+                        <!-- preenchido pelo JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../js/circuit.js"></script>
+</body>
+
+</html>

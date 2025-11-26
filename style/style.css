@@ -25,8 +25,12 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
-h1, h2, h3, strong, nav a{
-    font-family: 'MyF1Bold', sans-serif; 
+h1,
+h2,
+h3,
+strong,
+nav a {
+    font-family: 'MyF1Bold', sans-serif;
     text-transform: uppercase;
 }
 
@@ -45,9 +49,9 @@ p {
 nav a {
     color: white;
     text-decoration: none;
-    font-family: 'MyF1Font', sans-serif; 
+    font-family: 'MyF1Font', sans-serif;
     font-size: 0.9rem;
-    margin-left: 15px; 
+    margin-left: 15px;
     text-transform: uppercase;
 }
 
@@ -59,9 +63,9 @@ nav a:hover {
 header {
     background-color: #e10600;
     color: white;
-    padding: 15px 30px; 
-    
-    
+    padding: 15px 30px;
+
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -77,27 +81,37 @@ header strong {
 /* --- Action Cards Grid --- */
 .actions-grid {
     display: flex;
-    justify-content: space-between; /* Spreads them out evenly */
-    gap: 20px;                      /* Gap between cards */
-    padding: 40px 20px;             /* Spacing around the whole section */
-    max-width: 1200px;              /* Stops them getting too wide on huge screens */
-    margin: 0 auto;                 /* Centers the section */
-    flex-wrap: wrap;                /* Allows cards to stack on mobile phones */
+    justify-content: space-between;
+    /* Spreads them out evenly */
+    gap: 20px;
+    /* Gap between cards */
+    padding: 40px 20px;
+    /* Spacing around the whole section */
+    max-width: 1200px;
+    /* Stops them getting too wide on huge screens */
+    margin: 0 auto;
+    /* Centers the section */
+    flex-wrap: wrap;
+    /* Allows cards to stack on mobile phones */
 }
 
 /* --- Individual Card Style --- */
 .action-card {
-    flex: 1;                        /* Makes all 3 cards same width */
-    min-width: 250px;               /* Minimum width before stacking */
+    flex: 1;
+    /* Makes all 3 cards same width */
+    min-width: 250px;
+    /* Minimum width before stacking */
     background: white;
-    border-radius: 15px;            /* Rounded corners */
-    text-decoration: none;          /* Removes underline from links */
+    border-radius: 15px;
+    /* Rounded corners */
+    text-decoration: none;
+    /* Removes underline from links */
     color: black;
-    
+
     /* The F1 Look: Border on the Left and slight Shadow */
-    border-left: 5px solid #e10600; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    
+    border-left: 5px solid #e10600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
     /* Animation Transition */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
@@ -107,13 +121,15 @@ header strong {
 .action-card .card-content {
     padding: 30px;
     display: flex;
-    justify-content: space-between; /* Pushes text left, arrow right */
+    justify-content: space-between;
+    /* Pushes text left, arrow right */
     align-items: center;
 }
 
 /* Typography */
 .action-card h3 {
-    font-family: 'MyF1Font', sans-serif; /* Your Custom Font */
+    font-family: 'MyF1Font', sans-serif;
+    /* Your Custom Font */
     font-size: 1.2rem;
     margin: 0;
     text-transform: uppercase;
@@ -130,17 +146,22 @@ header strong {
 
 /* --- Hover Effects (The "Pop") --- */
 .action-card:hover {
-    transform: translateY(-5px);       /* Moves card up slightly */
-    box-shadow: 0 10px 25px rgba(225, 6, 0, 0.15); /* Reddish shadow */
-    background-color: #15151e;         /* Turns Dark on hover */
+    transform: translateY(-5px);
+    /* Moves card up slightly */
+    box-shadow: 0 10px 25px rgba(225, 6, 0, 0.15);
+    /* Reddish shadow */
+    background-color: #15151e;
+    /* Turns Dark on hover */
 }
 
 .action-card:hover h3 {
-    color: white;                      /* Text turns white */
+    color: white;
+    /* Text turns white */
 }
 
 .action-card:hover .arrow {
-    transform: translateX(10px);        /* Arrow moves right */
+    transform: translateX(10px);
+    /* Arrow moves right */
 }
 
 .dashboard-grid {
@@ -150,15 +171,17 @@ header strong {
     padding: 0 20px 40px 20px;
     max-width: 1200px;
     margin: 0 auto;
-    
+
     /* --- ADD THIS LINE --- */
-    align-items: start; 
+    align-items: start;
     /* This tells the cards: "Don't stretch! Just fit your content." */
 }
 
 .calendar-container .table-responsive {
-    max-height: 855px; /* Adjust this number as you like */
-    overflow-y: auto;  /* Adds a scrollbar inside the card */
+    max-height: 855px;
+    /* Adjust this number as you like */
+    overflow-y: auto;
+    /* Adds a scrollbar inside the card */
 }
 
 /* Make it stack on mobile phones */
@@ -172,9 +195,11 @@ header strong {
 .dashboard-card {
     background: white;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    overflow: hidden; /* Keeps corners rounded */
-    border-top: 5px solid #e10600; /* F1 Red Top Border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    /* Keeps corners rounded */
+    border-top: 5px solid #e10600;
+    /* F1 Red Top Border */
 }
 
 .card-header {
@@ -192,20 +217,23 @@ header strong {
 
 /* --- F1 Table Styling --- */
 .table-responsive {
-    overflow-x: auto; /* Scrollbar if table is too wide */
+    overflow-x: auto;
+    /* Scrollbar if table is too wide */
 }
 
 .f1-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'MyF1Font', sans-serif; /* Or Titillium Web */
+    font-family: 'MyF1Font', sans-serif;
+    /* Or Titillium Web */
     font-size: 0.9rem;
 }
 
 .f1-table th {
     text-align: left;
     padding: 12px 15px;
-    background-color: #15151e; /* Dark header */
+    background-color: #15151e;
+    /* Dark header */
     color: white;
     font-weight: normal;
     text-transform: uppercase;
@@ -223,7 +251,8 @@ header strong {
 }
 
 .f1-table tbody tr:hover {
-    background-color: #ffe5e5; /* Light red hover */
+    background-color: #ffe5e5;
+    /* Light red hover */
 }
 
 /* Special Styling for the "Position" column */
@@ -237,43 +266,235 @@ header strong {
 }
 
 .driver-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
 .driver-photo {
-  width: 140px;
-  height: 140px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid #ffffff;   /* borda branca fininha */
-  /* box-shadow: 0 2px 6px rgba(0,0,0,0.25); */
+    width: 180px;
+    /* não maior do que o arquivo real */
+    height: 180px;
+    object-fit: cover;
+    /* corta sem distorcer */
+    border-radius: 12px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
+.driver-meta p {
+    margin: 4px 0;
+}
+
+
 .driver-team-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .team-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .driver-search-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+    font-family: 'MyF1Font', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
 }
 
 .driver-search-form select,
 .driver-search-form button {
-  padding: 6px 10px;
-  font-family: 'MyF1Font', sans-serif;
+    padding: 6px 10px;
+    font-family: 'MyF1Font', sans-serif;
+    font-size: 0.9rem;
+}
+
+.driver-team-row {
+    display: flex;
+    /* Puts items side-by-side */
+    align-items: center;
+    /* Centers them vertically */
+    gap: 10px;
+    /* Adds space between text and logo */
+    margin-bottom: 20px;
+}
+
+.team-logo {
+    height: 30px;
+    margin-bottom: 20px;
+    /* Controls the logo size */
+    width: auto;
+    /* Maintains aspect ratio */
+    display: block;
+    /* Removes extra space below image */
+}
+
+/* Optional: Adjust your badge if needed */
+.team-badge {
+    margin-bottom: 0;
+    /* Removes bottom margin so it aligns with logo */
+}
+
+/* --- NEW DRIVER PROFILE STYLES --- */
+
+/* 1. Layout: Photo Left, Text Right */
+.driver-profile-container {
+    display: flex;
+    align-items: center;
+    /* Centers them vertically */
+    padding: 30px;
+    gap: 30px;
+    /* Space between photo and text */
+    background: linear-gradient(145deg, #ffffff 0%, #f4f4f4 100%);
+    /* Subtle gradient */
+}
+
+/* 2. The Photo Box (Fixes the distortion/quality) */
+.profile-image-box {
+    flex-shrink: 0;
+    /* Stops the image from getting squashed */
+    width: 200px;
+    /* Fixed width */
+    height: 200px;
+    /* Fixed height */
+    border-radius: 50%;
+    /* Makes it a circle (Professional TV Look) */
+    overflow: hidden;
+    /* Crops the square photo into a circle */
+    border: 5px solid #e10600;
+    /* F1 Red Border */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    /* Drop shadow */
+    background-color: white;
+}
+
+.profile-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* THE KEY FIX: Crops image perfectly instead of stretching it */
+    object-position: top center;
+    /* Focuses on the face */
+}
+
+/* 3. Typography & Badges */
+.profile-info-box h2 {
+    font-family: 'MyF1Wide', sans-serif;
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    line-height: 1;
+    color: #15151e;
+}
+
+.team-badge {
+    background-color: #15151e;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-family: 'MyF1Bold', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* 4. Meta Data (Number & Country) */
+.driver-meta-grid {
+    display: flex;
+    gap: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-item .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #666;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 1px;
+}
+
+.meta-item .value {
+    font-size: 1.5rem;
+    font-family: 'MyF1Bold', sans-serif;
+    color: #e10600;
+}
+
+/* 5. Stats List Styling (Optional Polish) */
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stats-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.stats-list li:last-child {
+    border-bottom: none;
+}
+
+.stat-value {
+    font-family: 'MyF1Bold', sans-serif;
+    font-size: 1.2rem;
+}
+
+.stat-label {
+    font-family: 'MyF1Font', sans-serif;
+    margin-left: 15px;
+}
+.circuits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.circuit-card {
+  cursor: pointer;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.circuit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
+
+.circuit-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.circuit-card-name {
+  padding: 10px 14px;
+  font-family: 'MyF1Bold', sans-serif;
+  text-transform: uppercase;
   font-size: 0.9rem;
 }
 
+.circuit-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}

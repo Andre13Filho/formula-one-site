@@ -81,13 +81,43 @@ async function loadDriverInfo() {
       "Piloto não encontrado.";
     return;
   }
+  const DRIVER_COUNTRY_NAMES = {
+    23: "Thailand",
+    44: "United Kingdom",
+    1: "Netherlands",
+    55: "Spain",
+    5: "Brazil",
+    4: "United Kingdom",
+    14: "Spain",
+    43: "Argentina",
+    27: "Germany",
+    31: "France",
+    18: "Canada",
+    12: "Italy",
+    10: "France",
+    30: "New Zealand",
+    81: "Australia",
+    22: "Japan",
+    87: "United Kingdom",
+    6: "France",
+    16: "Monaco",
+    63: "United Kingdom"
+  };
+
 
   const d = data[0];
 
   document.getElementById("driver-name").textContent = d.full_name;
   document.getElementById("driver-team").textContent = d.team_name || "-";
   document.getElementById("driver-number").textContent = d.driver_number;
-  document.getElementById("driver-country").textContent = d.country_code || "-";
+
+  const country =
+    d.country_code ||
+    DRIVER_COUNTRY_NAMES[d.driver_number] ||
+    "-";
+
+  document.getElementById("driver-country").textContent = country;
+
 
   const TEAM_LOGOS = {
     "Red Bull Racing": "red-bull.png",
@@ -103,12 +133,21 @@ async function loadDriverInfo() {
   };
 
 
-  // NOVO: foto
   const img = document.getElementById("driver-photo");
   if (img) {
     const localSrc = `../style/images/drivers/${d.driver_number}.png`;
-    img.src = d.headshot_url || localSrc;
+    img.src = localSrc;              // tenta SEMPRE a pasta local primeiro
+    img.alt = d.full_name;
+
+    img.onerror = () => {            // se a imagem local não existir
+      if (d.headshot_url) {
+        img.src = d.headshot_url;    // usa a headshot do OpenF1
+      } else {
+        img.src = "../style/images/driver-placeholder.png";
+      }
+    };
   }
+
 
   const teamName = d.team_name || "-";
   document.getElementById("driver-team").textContent = teamName;
@@ -117,7 +156,7 @@ async function loadDriverInfo() {
   if (logoImg && d.team_name) {
     const fileName = TEAM_LOGOS[teamName];
     if (fileName) {
-      logoImg.src = `../images/teams/${fileName}`;
+      logoImg.src = `../style/images/teams/${fileName}`;
       logoImg.alt = teamName;
     } else {
       // fallback: show a generic icon or hide the img
@@ -222,7 +261,8 @@ loadDriverInfo().catch((e) => {
 });
 
 loadDriverSeasonStats().catch((e) => {
-  populateDriverSelect().catch(console.error);
-  setupDriverSearchForm();
   console.error("Erro em loadDriverSeasonStats:", e);
 });
+
+populateDriverSelect().catch(console.error);
+setupDriverSearchForm();

@@ -24,41 +24,67 @@
         <form id="driver-search-form" class="driver-search-form">
           <label for="driver-select">Selecione o piloto:</label>
           <select id="driver-select">
-            <option value="">-- escolha um piloto --</option>
-            <!-- options preenchidas via JS -->
+            <option value="">escolha um piloto</option>
           </select>
-          <button type="submit">Ver detalhes</button>
+          <button type="submit">Pesquisar</button>
         </form>
       </div>
     </section>
     <div class="dashboard-grid">
-      <section class="dashboard-card">
-        <div class="card-header">
-          <h2 id="driver-name">Carregando piloto...</h2>
-          <p id="driver-team"></p>
-        </div>
-        <div class="driver-team-row">
-          <img id="team-logo" class="team-logo" src="" alt="" />
-          <p id="driver-team"></p>
-        </div>
-        <div class="card-body driver-header">
-          <img id="driver-photo" class="driver-photo" src="../images/driver-placeholder.png" alt="Foto do piloto" />
-          <div class="card-body" style="padding: 20px;">
-            <p>Número do carro: <span id="driver-number">-</span></p>
-            <p>País: <span id="driver-country">-</span></p>
+
+      <section class="dashboard-card profile-card">
+        <div class="driver-profile-container">
+
+          <div class="profile-image-box">
+            <img id="driver-photo" src="../images/driver-placeholder.png" alt="Foto do piloto" />
           </div>
+
+          <div class="profile-info-box">
+            <h2 id="driver-name">Carregando...</h2>
+
+            <div class="driver-team-row">
+              <div class="driver-team-row">
+                
+                <img id="team-logo" class="team-logo" src="" alt="Team Logo" />
+                <span id="driver-team" class="team-badge">Carregando...</span>
+              </div>
+            </div>
+
+            <div class="driver-meta-grid">
+              <div class="meta-item">
+                <span class="label">Número</span>
+                <span id="driver-number" class="value">-</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">País</span>
+                <span id="driver-country" class="value">-</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </section>
 
-      <section class="dashboard-card">
+      <section class="dashboard-card stats-card">
         <div class="card-header">
-          <h2>Resumo da temporada</h2>
+          <h2>Temporada</h2>
         </div>
-        <div class="card-body" style="padding: 20px;">
-          <p>Corridas: <span id="driver-races">-</span></p>
-          <p>Vitórias: <span id="driver-wins">-</span></p>
-          <p>Pódios: <span id="driver-podiums">-</span></p>
+        <div class="card-body stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">Corridas</span>
+            <span id="driver-races" class="stat-value">-</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Vitórias</span>
+            <span id="driver-wins" class="stat-value">-</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Pódios</span>
+            <span id="driver-podiums" class="stat-value">-</span>
+          </div>
         </div>
       </section>
+
     </div>
 
     <section class="dashboard-card" style="max-width: 1200px; margin: 20px auto;">
