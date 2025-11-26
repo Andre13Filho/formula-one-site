@@ -298,95 +298,106 @@ async function loadCircuitPage() {
     await loadLastRacesForCircuit(circuit.country_name);
 }
 
+async function getDriverMap() {
+  const res = await fetch(`${BASE_URL}/drivers?session_key=latest`);
+  if (!res.ok) throw new Error("Erro ao buscar drivers: " + res.status);
+  const drivers = await res.json();
+
+  const map = {};
+  drivers.forEach((d) => {
+    map[d.driver_number] = {
+      full_name: d.full_name,
+      team_name: d.team_name,
+    };
+  });
+  return map;
+}
+
+
 
 async function loadLastRacesForCircuit(countryName, limit = 5) {
-    const body = document.getElementById("circuit-races-body");
-    body.innerHTML = `
+  const body = document.getElementById("circuit-races-body");
+  body.innerHTML = `
     <tr><td colspan="3">Carregando corridas...</td></tr>
   `;
 
-    try {
-        const res = await fetch(
-            `${BASE_URL}/meetings?country_name=${encodeURIComponent(countryName)}`
-        );
-        if (!res.ok) {
-            throw new Error("Erro ao buscar meetings: " + res.status);
-        }
-        let meetings = await res.json();
+  try {
+    const [meetingsRes, driverMap] = await Promise.all([
+      fetch(`${BASE_URL}/meetings?country_name=${encodeURIComponent(countryName)}`),
+      getDriverMap(),
+    ]);
 
-        // ordenar por ano decrescente e pegar as últimas N corridas
-        meetings.sort((a, b) => b.year - a.year);
-        meetings = meetings.slice(0, limit);
-
-        // para cada meeting, buscar vencedor da corrida (session_name=Race)
-        const rows = [];
-
-        await Promise.all(
-            meetings.map(async (m) => {
-                const sessionsRes = await fetch(
-                    `${BASE_URL}/sessions?meeting_key=${m.meeting_key}&session_name=Race`
-                );
-                if (!sessionsRes.ok) return;
-                const sessions = await sessionsRes.json();
-                if (!sessions.length) return;
-
-                const raceSessionKey = sessions[0].session_key;
-
-                const resultRes = await fetch(
-                    `${BASE_URL}/session_result?session_key=${raceSessionKey}&position=1`
-                );
-                if (!resultRes.ok) return;
-                const result = await resultRes.json();
-                const winner = result.length ? result[0] : null;
-
-                rows.push({
-                    year: m.year,
-                    name: m.meeting_name,
-                    winner: winner ? winner.full_name || winner.broadcast_name : "-",
-                    meeting_key: m.meeting_key,
-                });
-
-            })
-        );
-
-        body.innerHTML = "";
-        if (!rows.length) {
-            body.innerHTML = `<tr><td colspan="3">Nenhuma corrida encontrada.</td></tr>`;
-            return;
-        }
-
-        rows
-            .sort((a, b) => b.year - a.year)
-            .forEach((row) => {
-                const tr = document.createElement("tr");
-                tr.classList.add("clickable-row");
-
-                const yearCell = document.createElement("td");
-                yearCell.textContent = row.year;
-
-                const nameCell = document.createElement("td");
-                nameCell.textContent = row.name;
-
-                const winnerCell = document.createElement("td");
-                winnerCell.textContent = row.winner;
-
-                tr.appendChild(yearCell);
-                tr.appendChild(nameCell);
-                tr.appendChild(winnerCell);
-
-                // clique → página da corrida
-                tr.addEventListener("click", () => {
-                    window.location.href = `race.html?meeting_key=${row.meeting_key}`;
-                });
-
-                body.appendChild(tr);
-            });
-
-    } catch (e) {
-        console.error(e);
-        body.innerHTML = `<tr><td colspan="3">Erro ao carregar corridas.</td></tr>`;
+    if (!meetingsRes.ok) {
+      throw new Error("Erro ao buscar meetings: " + meetingsRes.status);
     }
+    let meetings = await meetingsRes.json();
+
+    meetings.sort((a, b) => b.year - a.year);
+    meetings = meetings.slice(0, limit);
+
+    const rows = [];
+
+    await Promise.all(
+      meetings.map(async (m) => {
+        const sessionsRes = await fetch(
+          `${BASE_URL}/sessions?meeting_key=${m.meeting_key}&session_name=Race`
+        );
+        if (!sessionsRes.ok) return;
+        const sessions = await sessionsRes.json();
+        if (!sessions.length) return;
+
+        const raceSessionKey = sessions[0].session_key;
+
+        const resultRes = await fetch(
+          `${BASE_URL}/session_result?session_key=${raceSessionKey}&position=1`
+        );
+        if (!resultRes.ok) return;
+        const result = await resultRes.json();
+        if (!result.length) return;
+
+        const winnerRow = result[0];
+
+        rows.push({
+          year: m.year,
+          name: m.meeting_name || m.meeting_official_name || "-",
+          winner_number: winnerRow.driver_number,
+        });
+      })
+    );
+
+    body.innerHTML = "";
+    if (!rows.length) {
+      body.innerHTML = `<tr><td colspan="3">Nenhuma corrida encontrada.</td></tr>`;
+      return;
+    }
+
+    rows
+      .sort((a, b) => b.year - a.year)
+      .forEach((row) => {
+        const tr = document.createElement("tr");
+
+        const yearCell = document.createElement("td");
+        yearCell.textContent = row.year;
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = row.name;
+
+        const winnerCell = document.createElement("td");
+        const info = driverMap[row.winner_number];
+        winnerCell.textContent = info ? info.full_name : row.winner_number;
+
+        tr.appendChild(yearCell);
+        tr.appendChild(nameCell);
+        tr.appendChild(winnerCell);
+
+        body.appendChild(tr);
+      });
+  } catch (e) {
+    console.error(e);
+    body.innerHTML = `<tr><td colspan="3">Erro ao carregar corridas.</td></tr>`;
+  }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     loadCircuitPage().catch(console.error);
