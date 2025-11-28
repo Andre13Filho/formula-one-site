@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Temporada - BoxBoxData</title>
+    <link rel="stylesheet" href="../style/style.css" />
+  </head>
+  <body>
+    <header>
+      <strong>BoxBoxData.</strong>
+      <nav>
+        <a href="index.html">Início</a> |
+        <a href="drivers.html">Pilotos</a> |
+        <a href="teams.html">Equipes</a> |
+        <a href="circuits.html">Circuitos</a> |
+        <a href="seasons.html">Temporadas</a>
+      </nav>
+    </header>
+
+    <main style="padding: 20px;">
+      <section class="dashboard-card">
+        <div class="card-header">
+          <h2 id="season-title">Temporada</h2>
+          <p id="season-subtitle"></p>
+        </div>
+        <div class="table-responsive">
+          <table class="f1-table">
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Data</th>
+                <th>Grand Prix</th>
+                <th>Vencedor</th>
+              </tr>
+            </thead>
+            <tbody id="season-races-body">
+              <!-- preenchido via season.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="../js/season.js"></script>
+  </body>
+</html>
