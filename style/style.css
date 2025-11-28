@@ -647,18 +647,20 @@ header strong {
 }
 .seasons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* antes 240px */
+  gap: 24px;
 }
 
 .season-card {
   background: #ffffff;
   border-radius: 10px;
-  padding: 16px 18px;
+  padding: 18px 20px;      /* mais espaço interno */
+  min-height: 140px;       /* força altura maior */
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+
 
 .season-card:hover {
   transform: translateY(-2px);
@@ -673,3 +675,97 @@ header strong {
   margin: 2px 0;
   font-size: 0.85rem;
 }
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.team-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.team-card img {
+  width: 120px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.team-card h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  text-align: center;
+}
+.team-title {
+  text-align: center;
+  margin: 0;
+  font-size: 2rem;    /* ajuste se quiser maior/menor */
+}
+
+.team-header {
+  font-family: 'MyF1Wide', sans-serif;
+  display: flex;
+  flex-direction: column;   /* car below title area */
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0 20px;
+}
+
+.team-logo-big {
+  width: 140px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.team-car-img {
+  width: 100%;
+  max-width: 900px;   /* mantém o carro grande */
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+
+
+.team-driver-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.team-driver-card img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+#team-name {
+    font-size: 4rem;              /* Very big text (Adjust to 3rem or 5rem if needed) */
+    text-align: center;           /* Centers the text horizontally */
+    width: 100%;                  /* Ensures it takes full width to center properly */
+    margin: 30px 0 10px 0;        /* Adds space above and below */
+    
+    font-family: 'MyF1Wide', sans-serif; /* Your Wide F1 font */
+    text-transform: uppercase;    /* Forces CAPS like "WILLIAMS RACING" */
+    line-height: 1;               /* Keeps multi-line names tight */
+    color: #000000;               /* Solid black */
+}
+
+/* Optional: Removes the gray background from the header so it looks cleaner */
+.dashboard-card .card-header {
+    background: transparent;      /* Removes the gray box background */
+    border-bottom: none;          /* Removes the line under the name */
+    display: flex;                /* Helps with centering */
+    justify-content: center;      /* Centers the content */
+}
+

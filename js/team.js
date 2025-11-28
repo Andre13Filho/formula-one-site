@@ -1,0 +1,340 @@
+const BASE_URL = "https://api.openf1.org/v1";
+const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
+const YEAR = 2025;
+
+// mapeia nome -> arquivo (logo + carro) – adapte aos seus nomes reais
+const TEAM_ASSETS = {
+    "Red Bull Racing": {
+        logo: "red-bull.png",
+        car: "red_bull_racing.avif",
+    },
+    Mercedes: {
+        logo: "mercedes.png",
+        car: "mercedes.avif",
+    },
+    Ferrari: {
+        logo: "ferrari.png",
+        car: "ferrari.avif",
+    },
+    McLaren: {
+        logo: "mclaren.png",
+        car: "mclaren.avif",
+    },
+    "Aston Martin": {
+        logo: "aston-martin.png",
+        car: "aston_martin.avif",
+    },
+    Williams: {
+        logo: "williams.png",
+        car: "williams.avif",
+    },
+    "Haas F1 Team": {
+        logo: "haas.png",
+        car: "haas.avif",
+    },
+    "Kick Sauber": {
+        logo: "sauber.png",
+        car: "kick_sauber.avif",
+    },
+    Alpine: {
+        logo: "alpine.png",
+        car: "alpine.avif",
+    },
+    "Racing Bulls": {
+        logo: "racing-bulls.png",
+        car: "racing_bulls.avif",
+    },
+};
+function normalizeTeamName(name) {
+    return (name || "").toLowerCase().replace(/f1 team|formula 1 team/g, "").trim();
+}
+
+function getTeamFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("team");
+}
+
+async function fetchTeamDrivers(teamName) {
+  const urlTeamNorm = normalizeTeamName(teamName);
+
+  const sessionsRes = await fetch(
+    `${BASE_URL}/sessions?year=${YEAR}&session_name=Race`
+  );
+  if (!sessionsRes.ok) return [];
+  const sessions = await sessionsRes.json();
+  if (!sessions.length) return [];
+
+  sessions.sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
+  const lastSessionKey = sessions[sessions.length - 1].session_key;
+
+  const driversRes = await fetch(
+    `${BASE_URL}/drivers?session_key=${lastSessionKey}`
+  );
+  if (!driversRes.ok) return [];
+
+  const drivers = await driversRes.json();
+
+  return drivers.filter((d) => {
+    const rowTeamNorm = normalizeTeamName(d.team_name);
+    return rowTeamNorm === urlTeamNorm;
+  });
+}
+
+
+async function computeTeamSeasonStats(teamName) {
+    const sessionsRes = await fetch(
+        `${BASE_URL}/sessions?year=${YEAR}&session_name=Race`
+    );
+    if (!sessionsRes.ok) {
+        throw new Error("Erro ao buscar sessões Race: " + sessionsRes.status);
+    }
+    const sessions = await sessionsRes.json();
+    if (!sessions.length) return null;
+
+    let totalPoints = 0;
+    let races = 0;
+    let wins = 0;
+    let podiums = 0;
+    const racePointsRows = []; // para tabela por corrida
+
+    await Promise.all(
+        sessions.map(async (s, idx) => {
+            const res = await fetch(
+                `${BASE_URL}/session_result?session_key=${s.session_key}`
+            );
+            if (!res.ok) return;
+            const results = await res.json();
+
+            let racePoints = 0;
+            let teamBestPos = null;
+
+            const urlTeamNorm = normalizeTeamName(teamName);
+
+            results.forEach((row) => {
+                if (!row.team_name) return;
+
+                const rowTeamNorm = normalizeTeamName(row.team_name);
+                if (rowTeamNorm !== urlTeamNorm) return;
+
+                const pos = row.position;
+                if (pos >= 1 && pos <= 10) {
+                    racePoints += RACE_POINTS[pos - 1];
+                }
+
+                if (teamBestPos == null || pos < teamBestPos) {
+                    teamBestPos = pos;
+                }
+            });
+
+
+            if (racePoints > 0 || teamBestPos != null) {
+                races += 1;
+                totalPoints += racePoints;
+
+                if (teamBestPos === 1) wins += 1;
+                if (teamBestPos >= 1 && teamBestPos <= 3) podiums += 1;
+
+                racePointsRows.push({
+                    round: idx + 1,
+                    gp:
+                        s.meeting_official_name ||
+                        s.meeting_name ||
+                        `GP ${s.meeting_key}`,
+                    points: racePoints,
+                    meeting_key: s.meeting_key,
+                });
+            }
+        })
+    );
+
+    // ordenar rounds por número (caso Promise.all mude a ordem)
+    racePointsRows.sort((a, b) => a.round - b.round);
+
+    return { races, wins, podiums, totalPoints, racePointsRows };
+}
+
+function renderTeamHeader(teamName) {
+    document.getElementById("team-name").textContent = teamName;
+    const assets = TEAM_ASSETS[teamName];
+
+    const logoImg = document.getElementById("team-logo");
+    const carImg = document.getElementById("team-car");
+    const logoPath = assets ? `../style/images/teams/${assets.logo}` : "";
+    const carPath = assets ? `../style/images/car-images/${assets.car}` : "";
+
+    if (logoImg) {
+        logoImg.src = logoPath;
+        logoImg.alt = teamName;
+    }
+    if (carImg) {
+        carImg.src = carPath;
+        carImg.alt = `Carro ${teamName}`;
+    }
+}
+
+function renderTeamDrivers(drivers) {
+    const container = document.getElementById("team-drivers");
+    container.innerHTML = "";
+
+    if (!drivers.length) {
+        container.textContent = "Pilotos não encontrados.";
+        return;
+    }
+
+    const placeholder = "../style/images/drivers/driver-placeholder.png";
+
+    drivers.forEach((d) => {
+        const card = document.createElement("div");
+        card.className = "team-driver-card";
+
+        const img = document.createElement("img");
+        const localSrc = `../style/images/drivers/${d.driver_number}.png`;
+        img.src = localSrc;
+        img.onerror = () => {
+            img.src = placeholder;
+        };
+        img.alt = d.full_name;
+
+        const info = document.createElement("div");
+        const name = document.createElement("div");
+        name.textContent = d.full_name;
+
+        const num = document.createElement("div");
+        num.textContent = `Número: ${d.driver_number}`;
+
+        info.appendChild(name);
+        info.appendChild(num);
+
+        card.appendChild(img);
+        card.appendChild(info);
+
+        // clicar no piloto -> página de piloto
+        card.style.cursor = "pointer";
+        card.addEventListener("click", () => {
+            window.location.href = `../pages/driver.html?driver_number=${d.driver_number}`;
+        });
+
+        container.appendChild(card);
+    });
+}
+
+// --- FUNÇÕES DE RENDERIZAÇÃO CORRIGIDAS ---
+
+function renderTeamStats(stats) {
+  const container = document.getElementById("team-stats");
+  container.innerHTML = "";
+
+  if (!stats) {
+    container.textContent = "Estatísticas indisponíveis.";
+    return;
+  }
+
+  const { races, wins, podiums, totalPoints } = stats;
+
+  // A crase (template string) agora abre e fecha corretamente
+  // Usei tags <p> para separar as linhas, mas você pode ajustar o HTML conforme seu CSS
+  container.innerHTML = `
+    <div class="stat-item"><strong>CORRIDAS DISPUTADAS:</strong> ${races}</div>
+    <div class="stat-item"><strong>VITÓRIAS:</strong> ${wins}</div>
+    <div class="stat-item"><strong>PÓDIOS:</strong> ${podiums}</div>
+    <div class="stat-item"><strong>PONTOS TOTAIS (PILOTOS SOMADOS):</strong> ${totalPoints}</div>
+  `;
+}
+
+function renderTeamRacePoints(rows) {
+  const body = document.getElementById("team-races-body");
+  body.innerHTML = "";
+
+  // Verifica se o array de linhas existe e tem dados
+  if (!rows || rows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="3" style="text-align: center;">Nenhuma corrida encontrada.</td>`;
+    body.appendChild(tr);
+    return;
+  }
+
+  // Itera sobre cada corrida para criar a linha na tabela
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+
+    // Coluna 1: Round
+    const tdRound = document.createElement("td");
+    tdRound.textContent = row.round;
+    tr.appendChild(tdRound);
+
+    // Coluna 2: Grand Prix
+    const tdGP = document.createElement("td");
+    tdGP.textContent = row.gp;
+    tr.appendChild(tdGP);
+
+    // Coluna 3: Pontos da Equipe
+    const tdPoints = document.createElement("td");
+    tdPoints.textContent = row.points;
+    tr.appendChild(tdPoints);
+
+    body.appendChild(tr);
+  });
+}
+
+// --- INICIALIZAÇÃO (MAIN) ---
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const teamName = getTeamFromUrl(); // Pega o time da URL (ex: ?team=McLaren)
+  
+  if (!teamName) {
+    console.error("Nenhum time especificado na URL.");
+    // Opcional: Redirecionar ou mostrar mensagem de erro na tela
+    return;
+  }
+
+  console.log(`Carregando dados para a equipe: ${teamName}`);
+
+  // 1. Renderiza o cabeçalho (Nome, Logo, Carro)
+  renderTeamHeader(teamName);
+
+  // 2. Busca e renderiza os pilotos
+  try {
+    const drivers = await fetchTeamDrivers(teamName);
+    renderTeamDrivers(drivers);
+  } catch (error) {
+    console.error("Erro ao carregar pilotos:", error);
+  }
+
+  // 3. Calcula estatísticas e preenche a tabela de corridas
+  try {
+    const stats = await computeTeamSeasonStats(teamName);
+    if (stats) {
+      renderTeamStats(stats);
+      renderTeamRacePoints(stats.racePointsRows);
+    } else {
+      console.warn("Nenhuma estatística encontrada.");
+    }
+  } catch (error) {
+    console.error("Erro ao calcular estatísticas:", error);
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const teamName = getTeamFromUrl();
+    if (!teamName) {
+        document.getElementById("team-name").textContent =
+            "Nenhuma equipe selecionada.";
+        return;
+    }
+
+    renderTeamHeader(teamName);
+
+    try {
+        const [drivers, stats] = await Promise.all([
+            fetchTeamDrivers(teamName),
+            computeTeamSeasonStats(teamName),
+        ]);
+
+        renderTeamDrivers(drivers);
+        renderTeamStats(stats);
+        renderTeamRacePoints(stats ? stats.racePointsRows : []);
+    } catch (e) {
+        console.error(e);
+    }
+});
