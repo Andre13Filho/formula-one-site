@@ -292,39 +292,43 @@ function renderTeamStats(stats) {
 }
 
 function renderTeamRacePoints(rows) {
-    const body = document.getElementById("team-races-body");
-    body.innerHTML = "";
+  const body = document.getElementById("team-races-body");
+  body.innerHTML = "";
 
-    // Verifica se o array de linhas existe e tem dados
-    if (!rows || rows.length === 0) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="3" style="text-align: center;">Nenhuma corrida encontrada.</td>`;
-        body.appendChild(tr);
-        return;
-    }
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="3">Nenhuma corrida encontrada.</td></tr>`;
+    return;
+  }
 
-    // Itera sobre cada corrida para criar a linha na tabela
-    rows.forEach((row) => {
-        const tr = document.createElement("tr");
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.className = "clickable-row"; // classe para estilo responsivo
+    
+    const roundCell = document.createElement("td");
+    roundCell.textContent = row.round;
+    roundCell.setAttribute("data-label", "Round"); // para layout responsivo
 
-        // Coluna 1: Round
-        const tdRound = document.createElement("td");
-        tdRound.textContent = row.round;
-        tr.appendChild(tdRound);
+    const gpCell = document.createElement("td");
+    gpCell.textContent = row.gp;
+    gpCell.setAttribute("data-label", "Grand Prix");
 
-        // Coluna 2: Grand Prix
-        const tdGP = document.createElement("td");
-        tdGP.textContent = row.gp;
-        tr.appendChild(tdGP);
+    const ptsCell = document.createElement("td");
+    ptsCell.textContent = row.points;
+    ptsCell.setAttribute("data-label", "Pontos da equipe");
 
-        // Coluna 3: Pontos da Equipe
-        const tdPoints = document.createElement("td");
-        tdPoints.textContent = row.points;
-        tr.appendChild(tdPoints);
+    tr.appendChild(roundCell);
+    tr.appendChild(gpCell);
+    tr.appendChild(ptsCell);
 
-        body.appendChild(tr);
+    // Adiciona o evento de clique para navegar à página da corrida
+    tr.addEventListener("click", () => {
+      window.location.href = `race.html?meeting_key=${row.meeting_key}`;
     });
+
+    body.appendChild(tr);
+  });
 }
+
 
 // --- INICIALIZAÇÃO (MAIN) ---
 
@@ -341,6 +345,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 1. Renderiza o cabeçalho (Nome, Logo, Carro)
     renderTeamHeader(teamName);
+
+    // Mostrar placeholders até as chamadas à API responderem
+    const statsContainer = document.getElementById("team-stats");
+    if (statsContainer) statsContainer.textContent = "Carregando dados...";
+
+    const driversContainer = document.getElementById("team-drivers");
+    if (driversContainer) driversContainer.textContent = "Carregando pilotos...";
+
+    const racesBody = document.getElementById("team-races-body");
+    if (racesBody) {
+        racesBody.innerHTML = `<tr><td colspan="3" style="text-align:center">Carregando...</td></tr>`;
+    }
 
     // 2. Busca e renderiza os pilotos
     try {
@@ -374,6 +390,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     renderTeamHeader(teamName);
+
+    // Mostrar placeholders até as chamadas à API responderem
+    const statsContainer2 = document.getElementById("team-stats");
+    if (statsContainer2) statsContainer2.textContent = "Carregando dados...";
+
+    const driversContainer2 = document.getElementById("team-drivers");
+    if (driversContainer2) driversContainer2.textContent = "Carregando pilotos...";
+
+    const racesBody2 = document.getElementById("team-races-body");
+    if (racesBody2) {
+        racesBody2.innerHTML = `<tr><td colspan="3" style="text-align:center">Carregando...</td></tr>`;
+    }
 
     try {
         const [drivers, stats] = await Promise.all([

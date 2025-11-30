@@ -1,73 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Equipe - BoxBoxData</title>
-    <link rel="stylesheet" href="../style/style.css" />
-  </head>
-  <body>
-    <header>
-      <strong>BoxBoxData.</strong>
-      <nav>
-        <a href="../index.html">Início</a> |
-        <a href="drivers.html">Pilotos</a> |
-        <a href="teams.html">Equipes</a> |
-        <a href="circuits.html">Circuitos</a> |
-        <a href="seasons.html">Temporadas</a>
-      </nav>
-    </header>
 
-    <main style="padding: 20px;">
-      <section class="dashboard-card">
+<head>
+  <meta charset="UTF-8" />
+  <title>Equipe - BoxBoxData</title>
+  <link rel="stylesheet" href="../style/style.css" />
+</head>
+
+<body>
+  <header>
+    <strong>BoxBoxData.</strong>
+    <nav>
+      <a href="../index.html">Início</a> |
+      <a href="drivers.html">Pilotos</a> |
+      <a href="teams.html">Equipes</a> |
+      <a href="circuits.html">Circuitos</a> |
+      <a href="seasons.html">Temporadas</a>
+    </nav>
+  </header>
+
+  <main style="padding: 20px;">
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2 id="team-name">Carregando equipe...</h2>
+      </div>
+      <div class="card-body team-header">
+        <img id="team-logo" class="team-logo-big" src="" alt="" />
+        <img id="team-car" class="team-car-img" src="" alt="" />
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="dashboard-card">
         <div class="card-header">
-          <h2 id="team-name">Carregando equipe...</h2>
+          <h2>Pilotos</h2>
         </div>
-        <div class="card-body team-header">
-          <img id="team-logo" class="team-logo-big" src="" alt="" />
-          <img id="team-car" class="team-car-img" src="" alt="" />
+        <div class="card-body" id="team-drivers">
+          <!-- preenchido via team.js -->
         </div>
-      </section>
+      </div>
 
-      <section class="dashboard-grid">
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h2>Pilotos</h2>
-          </div>
-          <div class="card-body" id="team-drivers">
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h2>Estatísticas da equipe 2025</h2>
+        </div>
+        <div class="card-body" id="team-stats">
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2>Pontos por corrida (2025)</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="f1-table">
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Grand Prix</th>
+              <th>Pontos da equipe</th>
+            </tr>
+          </thead>
+          <tbody id="team-races-body">
             <!-- preenchido via team.js -->
-          </div>
-        </div>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h2>Estatísticas da equipe 2025</h2>
-          </div>
-          <div class="card-body" id="team-stats">
-          </div>
-        </div>
-      </section>
+  </main>
 
-      <section class="dashboard-card" style="margin-top: 20px;">
-        <div class="card-header">
-          <h2>Pontos por corrida (2025)</h2>
-        </div>
-        <div class="table-responsive">
-          <table class="f1-table">
-            <thead>
-              <tr>
-                <th>Round</th>
-                <th>Grand Prix</th>
-                <th>Pontos da equipe</th>
-              </tr>
-            </thead>
-            <tbody id="team-races-body">
-              <!-- preenchido via team.js -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
+  <script src="../js/team.js"></script>
+</body>
 
-    <script src="../js/team.js"></script>
-  </body>
 </html>
