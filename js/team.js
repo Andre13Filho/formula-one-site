@@ -55,103 +55,153 @@ function getTeamFromUrl() {
 }
 
 async function fetchTeamDrivers(teamName) {
-  const urlTeamNorm = normalizeTeamName(teamName);
+    const urlTeamNorm = normalizeTeamName(teamName);
 
-  const sessionsRes = await fetch(
-    `${BASE_URL}/sessions?year=${YEAR}&session_name=Race`
-  );
-  if (!sessionsRes.ok) return [];
-  const sessions = await sessionsRes.json();
-  if (!sessions.length) return [];
+    const sessionsRes = await fetch(
+        `${BASE_URL}/sessions?year=${YEAR}&session_name=Race`
+    );
+    if (!sessionsRes.ok) return [];
+    const sessions = await sessionsRes.json();
+    if (!sessions.length) return [];
 
-  sessions.sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
-  const lastSessionKey = sessions[sessions.length - 1].session_key;
+    sessions.sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
+    const lastSessionKey = sessions[sessions.length - 1].session_key;
 
-  const driversRes = await fetch(
-    `${BASE_URL}/drivers?session_key=${lastSessionKey}`
-  );
-  if (!driversRes.ok) return [];
+    const driversRes = await fetch(
+        `${BASE_URL}/drivers?session_key=${lastSessionKey}`
+    );
+    if (!driversRes.ok) return [];
 
-  const drivers = await driversRes.json();
+    const drivers = await driversRes.json();
 
-  return drivers.filter((d) => {
-    const rowTeamNorm = normalizeTeamName(d.team_name);
-    return rowTeamNorm === urlTeamNorm;
-  });
+    return drivers.filter((d) => {
+        const rowTeamNorm = normalizeTeamName(d.team_name);
+        return rowTeamNorm === urlTeamNorm;
+    });
 }
 
 
 async function computeTeamSeasonStats(teamName) {
-    const sessionsRes = await fetch(
-        `${BASE_URL}/sessions?year=${YEAR}&session_name=Race`
-    );
-    if (!sessionsRes.ok) {
-        throw new Error("Erro ao buscar sessões Race: " + sessionsRes.status);
-    }
-    const sessions = await sessionsRes.json();
-    if (!sessions.length) return null;
+    try {
+        // Get all meetings for the year
+        const meetingsResp = await fetch(`${BASE_URL}/meetings?year=${YEAR}`);
+        if (!meetingsResp.ok) {
+            throw new Error("Erro ao buscar meetings: " + meetingsResp.status);
+        }
+        const meetings = await meetingsResp.json();
 
-    let totalPoints = 0;
-    let races = 0;
-    let wins = 0;
-    let podiums = 0;
-    const racePointsRows = []; // para tabela por corrida
+        // Filter for completed races
+        const completedRaces = meetings.filter(m =>
+            m.date_start && new Date(m.date_start) < new Date()
+        );
 
-    await Promise.all(
-        sessions.map(async (s, idx) => {
-            const res = await fetch(
-                `${BASE_URL}/session_result?session_key=${s.session_key}`
+        if (completedRaces.length === 0) {
+            return {
+                races: 0,
+                wins: 0,
+                podiums: 0,
+                totalPoints: 0,
+                racePointsRows: []
+            };
+        }
+
+        let totalPoints = 0;
+        let wins = 0;
+        let podiums = 0;
+        const racePointsRows = [];
+
+        const urlTeamNorm = normalizeTeamName(teamName);
+
+        for (let idx = 0; idx < completedRaces.length; idx++) {
+            const meeting = completedRaces[idx];
+
+            // Get the Race session
+            const sessionsResp = await fetch(
+                `${BASE_URL}/sessions?meeting_key=${meeting.meeting_key}&session_name=Race`
             );
-            if (!res.ok) return;
-            const results = await res.json();
+            if (!sessionsResp.ok) continue;
+            const sessions = await sessionsResp.json();
 
-            let racePoints = 0;
-            let teamBestPos = null;
+            if (sessions.length === 0) continue;
+            const raceSession = sessions[0];
 
-            const urlTeamNorm = normalizeTeamName(teamName);
+            // Get driver info for this session to map driver_number to team
+            const driversResp = await fetch(
+                `${BASE_URL}/drivers?session_key=${raceSession.session_key}`
+            );
+            if (!driversResp.ok) continue;
+            const drivers = await driversResp.json();
 
-            results.forEach((row) => {
-                if (!row.team_name) return;
+            // Create map of driver_number -> team_name
+            const driverTeamMap = {};
+            drivers.forEach(d => {
+                driverTeamMap[d.driver_number] = normalizeTeamName(d.team_name);
+            });
 
-                const rowTeamNorm = normalizeTeamName(row.team_name);
-                if (rowTeamNorm !== urlTeamNorm) return;
+            // Get all position data for this race
+            const positionsResp = await fetch(
+                `${BASE_URL}/position?session_key=${raceSession.session_key}`
+            );
+            if (!positionsResp.ok) continue;
+            const positions = await positionsResp.json();
 
-                const pos = row.position;
-                if (pos >= 1 && pos <= 10) {
-                    racePoints += RACE_POINTS[pos - 1];
-                }
-
-                if (teamBestPos == null || pos < teamBestPos) {
-                    teamBestPos = pos;
+            // Get final positions (last entry per driver)
+            const finalPositions = {};
+            positions.forEach(pos => {
+                const key = pos.driver_number;
+                if (!finalPositions[key] || new Date(pos.date) > new Date(finalPositions[key].date)) {
+                    finalPositions[key] = pos;
                 }
             });
 
+            // Calculate points for this team in this race
+            let racePoints = 0;
+            let teamBestPos = null;
 
-            if (racePoints > 0 || teamBestPos != null) {
-                races += 1;
+            Object.values(finalPositions).forEach(pos => {
+                const driverTeam = driverTeamMap[pos.driver_number];
+                if (driverTeam === urlTeamNorm) {
+                    if (pos.position >= 1 && pos.position <= 10) {
+                        racePoints += RACE_POINTS[pos.position - 1];
+                    }
+                    if (teamBestPos === null || pos.position < teamBestPos) {
+                        teamBestPos = pos.position;
+                    }
+                }
+            });
+
+            // Add to race results
+            if (racePoints > 0 || teamBestPos !== null) {
                 totalPoints += racePoints;
-
                 if (teamBestPos === 1) wins += 1;
                 if (teamBestPos >= 1 && teamBestPos <= 3) podiums += 1;
 
                 racePointsRows.push({
                     round: idx + 1,
-                    gp:
-                        s.meeting_official_name ||
-                        s.meeting_name ||
-                        `GP ${s.meeting_key}`,
+                    gp: meeting.meeting_official_name || meeting.meeting_name || `GP ${meeting.meeting_key}`,
                     points: racePoints,
-                    meeting_key: s.meeting_key,
+                    meeting_key: meeting.meeting_key
                 });
             }
-        })
-    );
+        }
 
-    // ordenar rounds por número (caso Promise.all mude a ordem)
-    racePointsRows.sort((a, b) => a.round - b.round);
+        // Sort by round number
+        racePointsRows.sort((a, b) => a.round - b.round);
 
-    return { races, wins, podiums, totalPoints, racePointsRows };
+        return {
+            races: completedRaces.length,
+            wins,
+            podiums,
+            totalPoints,
+            racePointsRows
+        };
+
+    } catch (error) {
+        console.error("Erro em computeTeamSeasonStats:", error);
+        return null;
+    }
 }
+
 
 function renderTeamHeader(teamName) {
     document.getElementById("team-name").textContent = teamName;
@@ -221,19 +271,19 @@ function renderTeamDrivers(drivers) {
 // --- FUNÇÕES DE RENDERIZAÇÃO CORRIGIDAS ---
 
 function renderTeamStats(stats) {
-  const container = document.getElementById("team-stats");
-  container.innerHTML = "";
+    const container = document.getElementById("team-stats");
+    container.innerHTML = "";
 
-  if (!stats) {
-    container.textContent = "Estatísticas indisponíveis.";
-    return;
-  }
+    if (!stats) {
+        container.textContent = "Estatísticas indisponíveis.";
+        return;
+    }
 
-  const { races, wins, podiums, totalPoints } = stats;
+    const { races, wins, podiums, totalPoints } = stats;
 
-  // A crase (template string) agora abre e fecha corretamente
-  // Usei tags <p> para separar as linhas, mas você pode ajustar o HTML conforme seu CSS
-  container.innerHTML = `
+    // A crase (template string) agora abre e fecha corretamente
+    // Usei tags <p> para separar as linhas, mas você pode ajustar o HTML conforme seu CSS
+    container.innerHTML = `
     <div class="stat-item"><strong>CORRIDAS DISPUTADAS:</strong> ${races}</div>
     <div class="stat-item"><strong>VITÓRIAS:</strong> ${wins}</div>
     <div class="stat-item"><strong>PÓDIOS:</strong> ${podiums}</div>
@@ -242,76 +292,76 @@ function renderTeamStats(stats) {
 }
 
 function renderTeamRacePoints(rows) {
-  const body = document.getElementById("team-races-body");
-  body.innerHTML = "";
+    const body = document.getElementById("team-races-body");
+    body.innerHTML = "";
 
-  // Verifica se o array de linhas existe e tem dados
-  if (!rows || rows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="3" style="text-align: center;">Nenhuma corrida encontrada.</td>`;
-    body.appendChild(tr);
-    return;
-  }
+    // Verifica se o array de linhas existe e tem dados
+    if (!rows || rows.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="3" style="text-align: center;">Nenhuma corrida encontrada.</td>`;
+        body.appendChild(tr);
+        return;
+    }
 
-  // Itera sobre cada corrida para criar a linha na tabela
-  rows.forEach((row) => {
-    const tr = document.createElement("tr");
+    // Itera sobre cada corrida para criar a linha na tabela
+    rows.forEach((row) => {
+        const tr = document.createElement("tr");
 
-    // Coluna 1: Round
-    const tdRound = document.createElement("td");
-    tdRound.textContent = row.round;
-    tr.appendChild(tdRound);
+        // Coluna 1: Round
+        const tdRound = document.createElement("td");
+        tdRound.textContent = row.round;
+        tr.appendChild(tdRound);
 
-    // Coluna 2: Grand Prix
-    const tdGP = document.createElement("td");
-    tdGP.textContent = row.gp;
-    tr.appendChild(tdGP);
+        // Coluna 2: Grand Prix
+        const tdGP = document.createElement("td");
+        tdGP.textContent = row.gp;
+        tr.appendChild(tdGP);
 
-    // Coluna 3: Pontos da Equipe
-    const tdPoints = document.createElement("td");
-    tdPoints.textContent = row.points;
-    tr.appendChild(tdPoints);
+        // Coluna 3: Pontos da Equipe
+        const tdPoints = document.createElement("td");
+        tdPoints.textContent = row.points;
+        tr.appendChild(tdPoints);
 
-    body.appendChild(tr);
-  });
+        body.appendChild(tr);
+    });
 }
 
 // --- INICIALIZAÇÃO (MAIN) ---
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const teamName = getTeamFromUrl(); // Pega o time da URL (ex: ?team=McLaren)
-  
-  if (!teamName) {
-    console.error("Nenhum time especificado na URL.");
-    // Opcional: Redirecionar ou mostrar mensagem de erro na tela
-    return;
-  }
+    const teamName = getTeamFromUrl(); // Pega o time da URL (ex: ?team=McLaren)
 
-  console.log(`Carregando dados para a equipe: ${teamName}`);
-
-  // 1. Renderiza o cabeçalho (Nome, Logo, Carro)
-  renderTeamHeader(teamName);
-
-  // 2. Busca e renderiza os pilotos
-  try {
-    const drivers = await fetchTeamDrivers(teamName);
-    renderTeamDrivers(drivers);
-  } catch (error) {
-    console.error("Erro ao carregar pilotos:", error);
-  }
-
-  // 3. Calcula estatísticas e preenche a tabela de corridas
-  try {
-    const stats = await computeTeamSeasonStats(teamName);
-    if (stats) {
-      renderTeamStats(stats);
-      renderTeamRacePoints(stats.racePointsRows);
-    } else {
-      console.warn("Nenhuma estatística encontrada.");
+    if (!teamName) {
+        console.error("Nenhum time especificado na URL.");
+        // Opcional: Redirecionar ou mostrar mensagem de erro na tela
+        return;
     }
-  } catch (error) {
-    console.error("Erro ao calcular estatísticas:", error);
-  }
+
+    console.log(`Carregando dados para a equipe: ${teamName}`);
+
+    // 1. Renderiza o cabeçalho (Nome, Logo, Carro)
+    renderTeamHeader(teamName);
+
+    // 2. Busca e renderiza os pilotos
+    try {
+        const drivers = await fetchTeamDrivers(teamName);
+        renderTeamDrivers(drivers);
+    } catch (error) {
+        console.error("Erro ao carregar pilotos:", error);
+    }
+
+    // 3. Calcula estatísticas e preenche a tabela de corridas
+    try {
+        const stats = await computeTeamSeasonStats(teamName);
+        if (stats) {
+            renderTeamStats(stats);
+            renderTeamRacePoints(stats.racePointsRows);
+        } else {
+            console.warn("Nenhuma estatística encontrada.");
+        }
+    } catch (error) {
+        console.error("Erro ao calcular estatísticas:", error);
+    }
 });
 
 

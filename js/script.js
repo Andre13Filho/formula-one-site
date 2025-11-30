@@ -89,60 +89,77 @@ async function loadRealF1Calendar(year = 2025) {
 // ---------------------------------------------------------
 // 2. Standings core logic (/sessions + /session_result)
 // ---------------------------------------------------------
+// ---------------------------------------------------------
+// 2. Standings core logic (/sessions + /position)
+// ---------------------------------------------------------
 async function getSeasonDriverStandings(year = 2025) {
-  const sessionsRes = await fetch(
-    `${BASE_URL}/sessions?year=${year}&session_name=Race`
-  );
-  if (!sessionsRes.ok) {
-    throw new Error("Erro ao buscar sessões Race: " + sessionsRes.status);
-  }
-  const sessions = await sessionsRes.json();
+  try {
+    // Get all meetings for the year
+    const meetingsResp = await fetch(`${BASE_URL}/meetings?year=${year}`);
+    if (!meetingsResp.ok) throw new Error(`Erro ao buscar meetings: ${meetingsResp.status}`);
+    const meetings = await meetingsResp.json();
 
-  const standingsMap = {}; // driver_number -> { driver_number, points, races }
-
-  const promises = sessions.map(async (session) => {
-    const sessionKey = session.session_key;
-
-    const res = await fetch(
-      `${BASE_URL}/session_result?session_key=${sessionKey}`
+    // Filter for completed races (date in the past)
+    const completedRaces = meetings.filter(m =>
+      m.date_start && new Date(m.date_start) < new Date()
     );
 
-    if (!res.ok) {
-      console.warn("Erro ao buscar session_result para", sessionKey);
-      return;
+    const driverPointsMap = {}; // { driver_number: { driver_number, points, races } }
+
+    for (const meeting of completedRaces) {
+      // Get the Race session for this meeting
+      const sessionsResp = await fetch(
+        `${BASE_URL}/sessions?meeting_key=${meeting.meeting_key}&session_name=Race`
+      );
+      if (!sessionsResp.ok) continue;
+      const sessions = await sessionsResp.json();
+
+      if (sessions.length === 0) continue;
+      const raceSession = sessions[0];
+
+      // Get all position data for this race
+      const positionsResp = await fetch(
+        `${BASE_URL}/position?session_key=${raceSession.session_key}`
+      );
+      if (!positionsResp.ok) continue;
+      const positions = await positionsResp.json();
+
+      // Get final positions (last entry per driver)
+      const finalPositions = {};
+      positions.forEach(pos => {
+        const key = pos.driver_number;
+        if (!finalPositions[key] || new Date(pos.date) > new Date(finalPositions[key].date)) {
+          finalPositions[key] = pos;
+        }
+      });
+
+      // Award points
+      Object.values(finalPositions).forEach(pos => {
+        if (pos.position >= 1 && pos.position <= 10) {
+          const points = RACE_POINTS[pos.position - 1];
+          if (!driverPointsMap[pos.driver_number]) {
+            driverPointsMap[pos.driver_number] = {
+              driver_number: pos.driver_number,
+              points: 0,
+              races: 0
+            };
+          }
+          driverPointsMap[pos.driver_number].points += points;
+          driverPointsMap[pos.driver_number].races += 1;
+        }
+      });
     }
 
-    const results = await res.json();
+    // Convert to array and sort by points
+    const standings = Object.values(driverPointsMap).sort((a, b) => b.points - a.points);
+    return standings;
 
-    results.forEach((row) => {
-      const pos = row.position;
-      const driverNumber = row.driver_number;
-
-      if (pos >= 1 && pos <= 10) {
-        const points = RACE_POINTS[pos - 1];
-
-        if (!standingsMap[driverNumber]) {
-          standingsMap[driverNumber] = {
-            driver_number: driverNumber,
-            points: 0,
-            races: 0,
-          };
-        }
-
-        standingsMap[driverNumber].points += points;
-        standingsMap[driverNumber].races += 1;
-      }
-    });
-  });
-
-  await Promise.all(promises);
-
-  const standings = Object.values(standingsMap).sort(
-    (a, b) => b.points - a.points
-  );
-
-  return standings;
+  } catch (error) {
+    console.error("Erro em getSeasonDriverStandings:", error);
+    return [];
+  }
 }
+
 
 
 // ---------------------------------------------------------
