@@ -769,3 +769,9 @@ header strong {
     justify-content: center;      /* Centers the content */
 }
 
+.dashboard-card .stat-item {
+    margin: 10px 0;
+    margin-left: 15px;               /* Spacing between stats */
+    font-family: 'MyF1Font', sans-serif; /* Your F1 font */
+}
+

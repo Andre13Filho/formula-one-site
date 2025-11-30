@@ -287,7 +287,7 @@ function renderTeamStats(stats) {
     <div class="stat-item"><strong>CORRIDAS DISPUTADAS:</strong> ${races}</div>
     <div class="stat-item"><strong>VITÓRIAS:</strong> ${wins}</div>
     <div class="stat-item"><strong>PÓDIOS:</strong> ${podiums}</div>
-    <div class="stat-item"><strong>PONTOS TOTAIS (PILOTOS SOMADOS):</strong> ${totalPoints}</div>
+    <div class="stat-item"><strong>PONTOS TOTAIS:</strong> ${totalPoints}</div>
   `;
 }
 
