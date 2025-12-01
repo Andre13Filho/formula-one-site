@@ -565,9 +565,10 @@ header strong {
 }
 
 .banner-img {
-  width: 100%;
-  height: auto;
-  display: block;
+    width: 100%;
+    height: 950px; /* Try 400px, 500px, etc. */
+    object-fit: cover;
+    display: block;
 }
 
 /* text on top of the overlay */
@@ -890,5 +891,188 @@ header strong {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+
+/* Smartphone pequeno (até 480px) */
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 15px;
+  }
+
+  header strong {
+    font-size: 1.2rem;
+  }
+
+  nav a {
+    font-size: 0.75rem;
+    margin-left: 8px;
+  }
+
+  .banner-img {
+    height: 200px;
+  }
+
+  .actions-grid {
+    padding: 20px 10px;
+    gap: 15px;
+  }
+
+  .action-card {
+    min-width: 100%;
+  }
+
+  .action-card .card-content {
+    padding: 20px;
+  }
+
+  .action-card h3 {
+    font-size: 1rem;
+  }
+
+  .dashboard-grid {
+    padding: 0 10px 20px 10px;
+  }
+
+  .dashboard-card {
+    margin-bottom: 15px;
+  }
+
+  .card-header {
+    padding: 15px;
+  }
+
+  .card-header h2 {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .f1-table {
+    font-size: 0.8rem;
+  }
+
+  .f1-table th {
+    padding: 10px 8px;
+    font-size: 0.7rem;
+  }
+
+  .f1-table td {
+    padding: 8px;
+  }
+
+  .team-header {
+    gap: 12px;
+    padding: 8px 0 15px;
+  }
+
+  .team-logo-big {
+    max-width: 150px !important;
+  }
+
+  .team-car-img {
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+}
+
+/* Tablet (481px a 768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  header {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+  }
+
+  nav a {
+    font-size: 0.85rem;
+    margin-left: 10px;
+  }
+
+  .banner-img {
+    height: 250px;
+  }
+
+  .actions-grid {
+    padding: 30px 15px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .action-card {
+    min-width: auto;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    padding: 0 15px 30px 15px;
+  }
+
+  .team-logo-big {
+    max-width: 200px !important;
+  }
+
+  .team-car-img {
+    max-width: 90%;
+  }
+}
+
+/* Landscape mode (altura menor que 600px) */
+@media (max-height: 600px) {
+  header {
+    padding: 8px 15px;
+  }
+
+  .banner-img {
+    height: 150px;
+  }
+
+  .actions-grid {
+    padding: 15px 10px;
+  }
+
+  .dashboard-card {
+    margin-bottom: 10px;
+  }
+
+  .card-header {
+    padding: 10px;
+  }
+}
+
+/* Ajustes para tablets maiores (769px a 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-grid {
+    gap: 15px;
+  }
+
+  .team-logo-big {
+    max-width: 250px !important;
+  }
+}
+
+/* Garantir que botões e elementos clicáveis tenham tamanho adequado em mobile */
+@media (max-width: 768px) {
+  button,
+  a,
+  .clickable-row {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .team-driver-card,
+  .driver-card,
+  .circuit-card,
+  .team-card {
+    min-width: 100%;
+    margin-bottom: 10px;
+  }
 }
 
