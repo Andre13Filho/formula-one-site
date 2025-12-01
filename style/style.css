@@ -857,4 +857,34 @@ header strong {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 }
+/* Add space below the car image */
+.team-car-img {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 30px;  /* Add this line */
+}
+
+/* Add space below the team header section */
+.team-header {
+    font-family: 'MyF1Wide', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0 20px;
+    margin-bottom: 30px;  /* Add this line */
+}
+
+/* Ensure dashboard cards have proper spacing */
+.dashboard-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-top: 5px solid #e10600;
+    margin-bottom: 20px;  /* Add this line */
+}
 

@@ -107,8 +107,8 @@ async function loadRaceResults() {
       const teamCell = document.createElement("td");
       teamCell.textContent = info ? info.team_name : "-";
 
-      const lapsCell = document.createElement("td");
-      lapsCell.textContent = row.laps_completed ?? row.laps ?? "-";
+      // const lapsCell = document.createElement("td");
+      // lapsCell.textContent = row.laps_completed ?? row.laps ?? "-";
 
       const timeCell = document.createElement("td");
       let timeText = "-";
@@ -119,8 +119,8 @@ async function loadRaceResults() {
         timeText = row.time;
       } else if (row.gap_to_leader) {
         timeText = `+${row.gap_to_leader}s`;
-      } else if (row.laps_behind && row.laps_behind > 0) {
-        timeText = `${row.laps_behind} LAP`;
+      // } else if (row.laps_behind && row.laps_behind > 0) {
+      //   timeText = `${row.laps_behind} LAP`;
       } else if (index === 0 && winnerTime) {
         timeText = winnerTime;
       }
@@ -134,7 +134,7 @@ async function loadRaceResults() {
       tr.appendChild(numCell);
       tr.appendChild(nameCell);
       tr.appendChild(teamCell);
-      tr.appendChild(lapsCell);
+      // tr.appendChild(lapsCell);
       tr.appendChild(timeCell);
       tr.appendChild(ptsCell);
 
