@@ -3,7 +3,7 @@
   
   <!-- Página inicial -->
   <url>
-    <loc>https://seudominio.com/index.html</loc>
+    <loc>https://andre13filho.github.io/formula-one-site/index.html</loc>
     <lastmod>2025-12-01</lastmod>
     hangefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -11,7 +11,7 @@
   
   <!-- Pilotos -->
   <url>
-    <loc>https://seudominio.com/pages/drivers.html</loc>
+    <loc>https://andre13filho.github.io/formula-one-site/pages/drivers.html</loc>
     <lastmod>2025-12-01</lastmod>
     hangefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -19,7 +19,7 @@
   
   <!-- Equipes -->
   <url>
-    <loc>https://seudominio.com/teams.html</loc>
+    <loc>https://andre13filho.github.io/formula-one-site/teams.html</loc>
     <lastmod>2025-12-01</lastmod>
     hangefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -27,7 +27,7 @@
   
   <!-- Circuitos -->
   <url>
-    <loc>https://seudominio.com/pages/circuits.html</loc>
+    <loc>https://andre13filho.github.io/formula-one-site/pages/circuits.html</loc>
     <lastmod>2025-12-01</lastmod>
     hangefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -35,7 +35,7 @@
   
   <!-- Temporadas -->
   <url>
-    <loc>https://seudominio.com/seasons.html</loc>
+    <loc>https://andre13filho.github.io/formula-one-site/seasons.html</loc>
     <lastmod>2025-12-01</lastmod>
     hangefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -9,4 +9,4 @@ Allow: /style/
 Allow: /js/
 
 # Sitemap
-Sitemap: https://seudominio.com/sitemap.xml
+Sitemap: https://andre13filho.github.io/formula-one-site/sitemap.xml
