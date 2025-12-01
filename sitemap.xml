@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Página inicial -->
+  <url>
+    <loc>https://seudominio.com/index.html</loc>
+    <lastmod>2025-12-01</lastmod>
+    hangefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Pilotos -->
+  <url>
+    <loc>https://seudominio.com/pages/drivers.html</loc>
+    <lastmod>2025-12-01</lastmod>
+    hangefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Equipes -->
+  <url>
+    <loc>https://seudominio.com/teams.html</loc>
+    <lastmod>2025-12-01</lastmod>
+    hangefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Circuitos -->
+  <url>
+    <loc>https://seudominio.com/pages/circuits.html</loc>
+    <lastmod>2025-12-01</lastmod>
+    hangefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Temporadas -->
+  <url>
+    <loc>https://seudominio.com/seasons.html</loc>
+    <lastmod>2025-12-01</lastmod>
+    hangefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+</urlset>

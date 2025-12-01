@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /tmp/
+Disallow: /*?sessionid=
+
+# Allow CSS and JS
+Allow: /style/
+Allow: /js/
+
+# Sitemap
+Sitemap: https://seudominio.com/sitemap.xml

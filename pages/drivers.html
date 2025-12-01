@@ -1,51 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Pilotos - BoxBoxData</title>
-    <link rel="stylesheet" href="../style/style.css" />
-  </head>
-  <body>
-    <header>
-      <strong>BoxBoxData.</strong>
-      <nav>
-        <a href="../index.html">Início</a> |
-        <a href="teams.html">Equipes</a> |
-        <a href="circuits.html">Circuitos</a> |
-        <a href="seasons.html">Temporadas</a>
-      </nav>
-    </header>
 
-    <main style="padding: 20px;">
-      <!-- seletor rápido -->
-      <section class="dashboard-card" style="margin-bottom: 20px;">
-        <div class="card-header">
-          <h2>Buscar piloto</h2>
-        </div>
-        <div class="card-body">
-          <form id="drivers-search-form" class="driver-search-form">
-            <label for="drivers-select">Selecione o piloto:</label>
-            <select id="drivers-select">
-              <option value="">-- escolha um piloto --</option>
-            </select>
-            <button type="submit">Ver detalhes</button>
-          </form>
-        </div>
-      </section>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilotos F1 2025 - Estatísticas e Perfis | BoxBoxData</title>
+  <meta name="description"
+    content="Veja todos os pilotos da Fórmula 1 2025, suas estatísticas, equipes, números e perfis completos com dados de desempenho.">
+  <link rel="stylesheet" href="../style/style.css">
+</head>
 
-      <!-- grade de pilotos -->
-      <section class="dashboard-card">
-        <div class="card-header">
-          <h2>Pilotos 2025</h2>
-        </div>
-        <div class="card-body">
-          <div id="drivers-grid" class="drivers-grid">
-            <!-- preenchido via drivers.js -->
-          </div>
-        </div>
-      </section>
-    </main>
+<body>
+  <header>
+    <strong>BoxBoxData.</strong>
+    <nav>
+      <a href="../index.html">Início</a> |
+      <a href="teams.html">Equipes</a> |
+      <a href="circuits.html">Circuitos</a> |
+      <a href="seasons.html">Temporadas</a>
+    </nav>
+  </header>
 
-    <script src="../js/drivers.js"></script>
-  </body>
+  <main style="padding: 20px;">
+    <!-- seletor rápido -->
+    <section class="dashboard-card" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <h2>Buscar piloto</h2>
+      </div>
+      <div class="card-body">
+        <form id="drivers-search-form" class="driver-search-form">
+          <label for="drivers-select">Selecione o piloto:</label>
+          <select id="drivers-select">
+            <option value="">-- escolha um piloto --</option>
+          </select>
+          <button type="submit">Ver detalhes</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- grade de pilotos -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2>Pilotos 2025</h2>
+      </div>
+      <div class="card-body">
+        <div id="drivers-grid" class="drivers-grid">
+          <!-- preenchido via drivers.js -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/drivers.js"></script>
+</body>
+
 </html>

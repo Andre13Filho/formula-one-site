@@ -887,4 +887,8 @@ header strong {
     border-top: 5px solid #e10600;
     margin-bottom: 20px;  /* Add this line */
 }
+img {
+  max-width: 100%;
+  height: auto;
+}
 
