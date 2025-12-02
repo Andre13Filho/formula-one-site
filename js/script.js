@@ -2,7 +2,6 @@
 // 0. Config
 // ---------------------------------------------------------
 const BASE_URL = "https://api.openf1.org/v1";
-const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
 
 
 // ---------------------------------------------------------
@@ -89,71 +88,90 @@ async function loadRealF1Calendar(year = 2025) {
 // ---------------------------------------------------------
 // 2. Standings core logic (/sessions + /session_result)
 // ---------------------------------------------------------
-// ---------------------------------------------------------
-// 2. Standings core logic (/sessions + /position)
-// ---------------------------------------------------------
 async function getSeasonDriverStandings(year = 2025) {
   try {
-    // Get all meetings for the year
+    const now = new Date();
+
+    // meetings do ano
     const meetingsResp = await fetch(`${BASE_URL}/meetings?year=${year}`);
-    if (!meetingsResp.ok) throw new Error(`Erro ao buscar meetings: ${meetingsResp.status}`);
+    if (!meetingsResp.ok) {
+      throw new Error(`Erro ao buscar meetings: ${meetingsResp.status}`);
+    }
     const meetings = await meetingsResp.json();
 
-    // Filter for completed races (date in the past)
-    const completedRaces = meetings.filter(m =>
-      m.date_start && new Date(m.date_start) < new Date()
+    // somente meetings já iniciados
+    const completedRaces = meetings.filter(
+      (m) => m.date_start && new Date(m.date_start) < now
     );
 
     const driverPointsMap = {}; // { driver_number: { driver_number, points, races } }
 
     for (const meeting of completedRaces) {
-      // Get the Race session for this meeting
-      const sessionsResp = await fetch(
-        `${BASE_URL}/sessions?meeting_key=${meeting.meeting_key}&session_name=Race`
-      );
-      if (!sessionsResp.ok) continue;
-      const sessions = await sessionsResp.json();
-
-      if (sessions.length === 0) continue;
-      const raceSession = sessions[0];
-
-      // Get all position data for this race
-      const positionsResp = await fetch(
-        `${BASE_URL}/position?session_key=${raceSession.session_key}`
-      );
-      if (!positionsResp.ok) continue;
-      const positions = await positionsResp.json();
-
-      // Get final positions (last entry per driver)
-      const finalPositions = {};
-      positions.forEach(pos => {
-        const key = pos.driver_number;
-        if (!finalPositions[key] || new Date(pos.date) > new Date(finalPositions[key].date)) {
-          finalPositions[key] = pos;
+      let sessions = [];
+      try {
+        const sessionsResp = await fetch(
+          `${BASE_URL}/sessions?meeting_key=${meeting.meeting_key}`
+        );
+        if (!sessionsResp.ok) {
+          throw new Error(`status ${sessionsResp.status}`);
         }
+        sessions = await sessionsResp.json();
+      } catch (sessionError) {
+        console.error(
+          `Erro ao buscar sessões para meeting ${meeting.meeting_key}:`,
+          sessionError
+        );
+        continue;
+      }
+
+      // Race (domingo) + Sprint (caso exista) rendem pontos oficiais
+      const scoringSessions = sessions.filter((session) => {
+        const isScoringSession =
+          session.session_type === "Race" &&
+          (session.session_name === "Race" || session.session_name === "Sprint");
+        if (!isScoringSession) return false;
+
+        if (!session.date_end) return true;
+        return new Date(session.date_end) < now;
       });
 
-      // Award points
-      Object.values(finalPositions).forEach(pos => {
-        if (pos.position >= 1 && pos.position <= 10) {
-          const points = RACE_POINTS[pos.position - 1];
-          if (!driverPointsMap[pos.driver_number]) {
-            driverPointsMap[pos.driver_number] = {
-              driver_number: pos.driver_number,
-              points: 0,
-              races: 0
-            };
+      for (const session of scoringSessions) {
+        try {
+          const resultsResp = await fetch(
+            `${BASE_URL}/session_result?session_key=${session.session_key}`
+          );
+          if (!resultsResp.ok) {
+            throw new Error(`status ${resultsResp.status}`);
           }
-          driverPointsMap[pos.driver_number].points += points;
-          driverPointsMap[pos.driver_number].races += 1;
+          const results = await resultsResp.json();
+          if (!results.length) continue;
+
+          results.forEach((result) => {
+            const points = Number(result.points);
+            if (!points) return; // sem pontos para somar
+
+            const driverNumber = result.driver_number;
+            if (!driverPointsMap[driverNumber]) {
+              driverPointsMap[driverNumber] = {
+                driver_number: driverNumber,
+                points: 0,
+                races: 0,
+              };
+            }
+
+            driverPointsMap[driverNumber].points += points;
+            driverPointsMap[driverNumber].races += 1;
+          });
+        } catch (sessionResultError) {
+          console.error(
+            `Erro ao buscar session_result ${session.session_key}:`,
+            sessionResultError
+          );
         }
-      });
+      }
     }
 
-    // Convert to array and sort by points
-    const standings = Object.values(driverPointsMap).sort((a, b) => b.points - a.points);
-    return standings;
-
+    return Object.values(driverPointsMap).sort((a, b) => b.points - a.points);
   } catch (error) {
     console.error("Erro em getSeasonDriverStandings:", error);
     return [];
