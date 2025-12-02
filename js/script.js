@@ -1,12 +1,12 @@
-// ---------------------------------------------------------
-// 0. Config
-// ---------------------------------------------------------
+
+
+
 const BASE_URL = "https://api.openf1.org/v1";
 
 
-// ---------------------------------------------------------
-// 1. Calendar (/meetings)
-// ---------------------------------------------------------
+
+
+
 async function loadRealF1Calendar(year = 2025) {
   const tableBody = document.getElementById("calendar-body");
 
@@ -66,7 +66,7 @@ async function loadRealF1Calendar(year = 2025) {
       tr.appendChild(gpCell);
       tr.appendChild(circuitCell);
 
-      // linha inteira clicável → página da corrida
+      
       tr.style.cursor = "pointer";
       tr.addEventListener("click", () => {
         window.location.href = `pages/race.html?meeting_key=${m.meeting_key}`;
@@ -85,26 +85,26 @@ async function loadRealF1Calendar(year = 2025) {
 }
 
 
-// ---------------------------------------------------------
-// 2. Standings core logic (/sessions + /session_result)
-// ---------------------------------------------------------
+
+
+
 async function getSeasonDriverStandings(year = 2025) {
   try {
     const now = new Date();
 
-    // meetings do ano
+    
     const meetingsResp = await fetch(`${BASE_URL}/meetings?year=${year}`);
     if (!meetingsResp.ok) {
       throw new Error(`Erro ao buscar meetings: ${meetingsResp.status}`);
     }
     const meetings = await meetingsResp.json();
 
-    // somente meetings já iniciados
+    
     const completedRaces = meetings.filter(
       (m) => m.date_start && new Date(m.date_start) < now
     );
 
-    const driverPointsMap = {}; // { driver_number: { driver_number, points, races } }
+    const driverPointsMap = {}; 
 
     for (const meeting of completedRaces) {
       let sessions = [];
@@ -124,7 +124,7 @@ async function getSeasonDriverStandings(year = 2025) {
         continue;
       }
 
-      // Race (domingo) + Sprint (caso exista) rendem pontos oficiais
+      
       const scoringSessions = sessions.filter((session) => {
         const isScoringSession =
           session.session_type === "Race" &&
@@ -148,7 +148,7 @@ async function getSeasonDriverStandings(year = 2025) {
 
           results.forEach((result) => {
             const points = Number(result.points);
-            if (!points) return; // sem pontos para somar
+            if (!points) return; 
 
             const driverNumber = result.driver_number;
             if (!driverPointsMap[driverNumber]) {
@@ -180,10 +180,10 @@ async function getSeasonDriverStandings(year = 2025) {
 
 
 
-// ---------------------------------------------------------
-// 3. Driver map with names (/drivers)
-//    Simplified: just use latest session, no extra /sessions call
-// ---------------------------------------------------------
+
+
+
+
 async function getDriverMap() {
   const driversRes = await fetch(
     `${BASE_URL}/drivers?session_key=latest`
@@ -207,9 +207,9 @@ async function getDriverMap() {
 }
 
 
-// ---------------------------------------------------------
-// 4. Render standings table
-// ---------------------------------------------------------
+
+
+
 async function loadSeasonStandingsTable(year = 2025) {
   const tableBody = document.getElementById("standings-body");
 
@@ -239,16 +239,16 @@ async function loadSeasonStandingsTable(year = 2025) {
     standings.forEach((driver, index) => {
       const tr = document.createElement("tr");
 
-      // POS
+      
       const posCell = document.createElement("td");
       posCell.textContent = index + 1;
 
-      // PILOTO (com link)
+      
       const nameCell = document.createElement("td");
       const info = driverMap[driver.driver_number];
       const displayName = info ? info.full_name : driver.driver_number;
 
-      nameCell.textContent = ""; // garante vazio
+      nameCell.textContent = ""; 
 
       const driverLink = document.createElement("a");
       driverLink.href = `pages/driver.html?driver_number=${driver.driver_number}`;
@@ -259,11 +259,11 @@ async function loadSeasonStandingsTable(year = 2025) {
 
       nameCell.appendChild(driverLink);
 
-      // PTS
+      
       const ptsCell = document.createElement("td");
       ptsCell.textContent = driver.points;
 
-      // Monta a linha completa
+      
       tr.appendChild(posCell);
       tr.appendChild(nameCell);
       tr.appendChild(ptsCell);
@@ -280,18 +280,18 @@ async function loadSeasonStandingsTable(year = 2025) {
   }
 }
 
-// ---------------------------------------------------------
-// 6. "Ver última corrida" -> ir para a última Race
-// ---------------------------------------------------------
+
+
+
 async function goToLastRace(year = 2025) {
   try {
     const card = document.getElementById("last-race-card");
     if (!card) return;
 
-    // opcional: estado visual
+    
     card.classList.add("loading");
 
-    // todas as sessões Race do ano
+    
     const res = await fetch(
       `${BASE_URL}/sessions?year=${year}&session_name=Race`
     );
@@ -305,7 +305,7 @@ async function goToLastRace(year = 2025) {
       return;
     }
 
-    // ordenar pela data de início e pegar a última
+    
     sessions.sort(
       (a, b) => new Date(a.date_start) - new Date(b.date_start)
     );
@@ -316,7 +316,7 @@ async function goToLastRace(year = 2025) {
       return;
     }
 
-    // abre a sua página de corrida existente
+    
     window.location.href = `pages/race.html?meeting_key=${lastSession.meeting_key}`;
   } catch (e) {
     console.error(e);
@@ -337,9 +337,9 @@ function setupLastRaceLink() {
 
 
 
-// ---------------------------------------------------------
-// 5. Boot
-// ---------------------------------------------------------
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   loadRealF1Calendar(2025);
   loadSeasonStandingsTable(2025);

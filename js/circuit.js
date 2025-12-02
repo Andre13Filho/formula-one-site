@@ -1,7 +1,7 @@
 const BASE_URL = "https://api.openf1.org/v1";
 
-// mesmo array CIRCUITS ou importe de outro arquivo
-// js/circuits.js (or a separate config file)
+
+
 const CIRCUITS = [
   {
     slug: "australia",
@@ -322,7 +322,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
   `;
 
   try {
-    // 1) meetings nesse país
+    
     const [meetingsRes, driverMap] = await Promise.all([
       fetch(`${BASE_URL}/meetings?country_name=${encodeURIComponent(countryName)}`),
       getDriverMap(),
@@ -333,13 +333,13 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
     }
     let meetings = await meetingsRes.json();
 
-    // ordenar por ano desc e pegar as últimas N
+    
     meetings.sort((a, b) => b.year - a.year);
     meetings = meetings.slice(0, limit);
 
     const rows = [];
 
-    // 2) para cada meeting, pegar a sessão Race e o vencedor
+    
     await Promise.all(
       meetings.map(async (m) => {
         const sessionsRes = await fetch(
@@ -351,7 +351,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
 
         const raceSessionKey = sessions[0].session_key;
 
-        // vencedor = posição 1
+        
         const resultRes = await fetch(
           `${BASE_URL}/session_result?session_key=${raceSessionKey}&position=1`
         );
@@ -373,7 +373,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
       })
     );
 
-    // 3) renderizar tabela
+    
     body.innerHTML = "";
     if (!rows.length) {
       body.innerHTML = `<tr><td colspan="3">Nenhuma corrida encontrada.</td></tr>`;
@@ -384,7 +384,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
       .sort((a, b) => b.year - a.year)
       .forEach((row) => {
         const tr = document.createElement("tr");
-        tr.className = "clickable-row"; // classe para responsividade
+        tr.className = "clickable-row"; 
 
         const yearCell = document.createElement("td");
         yearCell.textContent = row.year;
@@ -402,7 +402,7 @@ async function loadLastRacesForCircuit(countryName, limit = 5) {
         tr.appendChild(nameCell);
         tr.appendChild(winnerCell);
 
-        // Adiciona o evento de clique para navegar à página da corrida
+        
         tr.addEventListener("click", () => {
           window.location.href = `race.html?meeting_key=${row.meeting_key}`;
         });

@@ -6,12 +6,12 @@ async function fetchDrivers() {
     throw new Error("Erro ao buscar drivers: " + res.status);
   }
   const data = await res.json();
-  // ordenar por número
+  
   data.sort((a, b) => a.driver_number - b.driver_number);
   return data;
 }
 
-// 1. preencher select de pilotos
+
 async function populateDriversSelect(drivers) {
   const select = document.getElementById("drivers-select");
   if (!select) return;
@@ -24,7 +24,7 @@ async function populateDriversSelect(drivers) {
   });
 }
 
-// 2. montar grade de cartões
+
 function renderDriversGrid(drivers) {
   const grid = document.getElementById("drivers-grid");
   if (!grid) return;
@@ -62,7 +62,7 @@ function renderDriversGrid(drivers) {
     card.appendChild(img);
     card.appendChild(infoDiv);
 
-    // clique no cartão -> driver.html
+    
     card.addEventListener("click", () => {
       window.location.href = `driver.html?driver_number=${d.driver_number}`;
     });
@@ -71,7 +71,7 @@ function renderDriversGrid(drivers) {
   });
 }
 
-// 3. form de busca (igual ao driver page)
+
 function setupDriversSearchForm() {
   const form = document.getElementById("drivers-search-form");
   const select = document.getElementById("drivers-select");
@@ -85,7 +85,7 @@ function setupDriversSearchForm() {
   });
 }
 
-// 4. boot
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const drivers = await fetchDrivers();

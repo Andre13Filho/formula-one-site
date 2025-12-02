@@ -6,7 +6,7 @@ function getYearFromUrl() {
   return Number.isFinite(y) ? y : new Date().getFullYear();
 }
 
-// pequeno mapa para traduzir número -> nome do piloto
+
 async function getDriverMapForYear(year) {
   const sessionsRes = await fetch(
     `${BASE_URL}/sessions?year=${year}&session_name=Race`
@@ -44,7 +44,7 @@ async function loadSeasonPage() {
   `;
 
   try {
-    // 1) todas as corridas do ano
+    
     const [sessionsRes, driverMap] = await Promise.all([
       fetch(`${BASE_URL}/sessions?year=${year}&session_name=Race`),
       getDriverMapForYear(year),
@@ -59,13 +59,13 @@ async function loadSeasonPage() {
       return;
     }
 
-    // ordenar por data
+    
     sessions.sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
 
     const rows = [];
     await Promise.all(
       sessions.map(async (s, index) => {
-        // pegar winner (posição 1)
+        
         const res = await fetch(
           `${BASE_URL}/session_result?session_key=${s.session_key}&position=1`
         );

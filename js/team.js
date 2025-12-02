@@ -2,7 +2,7 @@ const BASE_URL = "https://api.openf1.org/v1";
 const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
 const YEAR = 2025;
 
-// mapeia nome -> arquivo (logo + carro) – adapte aos seus nomes reais
+
 const TEAM_ASSETS = {
     "Red Bull Racing": {
         logo: "red-bull.png",
@@ -83,14 +83,14 @@ async function fetchTeamDrivers(teamName) {
 
 async function computeTeamSeasonStats(teamName) {
     try {
-        // Get all meetings for the year
+        
         const meetingsResp = await fetch(`${BASE_URL}/meetings?year=${YEAR}`);
         if (!meetingsResp.ok) {
             throw new Error("Erro ao buscar meetings: " + meetingsResp.status);
         }
         const meetings = await meetingsResp.json();
 
-        // Filter for completed races
+        
         const completedRaces = meetings.filter(m =>
             m.date_start && new Date(m.date_start) < new Date()
         );
@@ -115,7 +115,7 @@ async function computeTeamSeasonStats(teamName) {
         for (let idx = 0; idx < completedRaces.length; idx++) {
             const meeting = completedRaces[idx];
 
-            // Get the Race session
+            
             const sessionsResp = await fetch(
                 `${BASE_URL}/sessions?meeting_key=${meeting.meeting_key}&session_name=Race`
             );
@@ -125,27 +125,27 @@ async function computeTeamSeasonStats(teamName) {
             if (sessions.length === 0) continue;
             const raceSession = sessions[0];
 
-            // Get driver info for this session to map driver_number to team
+            
             const driversResp = await fetch(
                 `${BASE_URL}/drivers?session_key=${raceSession.session_key}`
             );
             if (!driversResp.ok) continue;
             const drivers = await driversResp.json();
 
-            // Create map of driver_number -> team_name
+            
             const driverTeamMap = {};
             drivers.forEach(d => {
                 driverTeamMap[d.driver_number] = normalizeTeamName(d.team_name);
             });
 
-            // Get all position data for this race
+            
             const positionsResp = await fetch(
                 `${BASE_URL}/position?session_key=${raceSession.session_key}`
             );
             if (!positionsResp.ok) continue;
             const positions = await positionsResp.json();
 
-            // Get final positions (last entry per driver)
+            
             const finalPositions = {};
             positions.forEach(pos => {
                 const key = pos.driver_number;
@@ -154,7 +154,7 @@ async function computeTeamSeasonStats(teamName) {
                 }
             });
 
-            // Calculate points for this team in this race
+            
             let racePoints = 0;
             let teamBestPos = null;
 
@@ -170,7 +170,7 @@ async function computeTeamSeasonStats(teamName) {
                 }
             });
 
-            // Add to race results
+            
             if (racePoints > 0 || teamBestPos !== null) {
                 totalPoints += racePoints;
                 if (teamBestPos === 1) wins += 1;
@@ -185,7 +185,7 @@ async function computeTeamSeasonStats(teamName) {
             }
         }
 
-        // Sort by round number
+        
         racePointsRows.sort((a, b) => a.round - b.round);
 
         return {
@@ -258,7 +258,7 @@ function renderTeamDrivers(drivers) {
         card.appendChild(img);
         card.appendChild(info);
 
-        // clicar no piloto -> página de piloto
+        
         card.style.cursor = "pointer";
         card.addEventListener("click", () => {
             window.location.href = `../pages/driver.html?driver_number=${d.driver_number}`;
@@ -268,7 +268,7 @@ function renderTeamDrivers(drivers) {
     });
 }
 
-// --- FUNÇÕES DE RENDERIZAÇÃO CORRIGIDAS ---
+
 
 function renderTeamStats(stats) {
     const container = document.getElementById("team-stats");
@@ -281,8 +281,8 @@ function renderTeamStats(stats) {
 
     const { races, wins, podiums, totalPoints } = stats;
 
-    // A crase (template string) agora abre e fecha corretamente
-    // Usei tags <p> para separar as linhas, mas você pode ajustar o HTML conforme seu CSS
+    
+    
     container.innerHTML = `
     <div class="stat-item"><strong>CORRIDAS DISPUTADAS:</strong> ${races}</div>
     <div class="stat-item"><strong>VITÓRIAS:</strong> ${wins}</div>
@@ -302,11 +302,11 @@ function renderTeamRacePoints(rows) {
 
   rows.forEach((row) => {
     const tr = document.createElement("tr");
-    tr.className = "clickable-row"; // classe para estilo responsivo
+    tr.className = "clickable-row"; 
     
     const roundCell = document.createElement("td");
     roundCell.textContent = row.round;
-    roundCell.setAttribute("data-label", "Round"); // para layout responsivo
+    roundCell.setAttribute("data-label", "Round"); 
 
     const gpCell = document.createElement("td");
     gpCell.textContent = row.gp;
@@ -320,7 +320,7 @@ function renderTeamRacePoints(rows) {
     tr.appendChild(gpCell);
     tr.appendChild(ptsCell);
 
-    // Adiciona o evento de clique para navegar à página da corrida
+    
     tr.addEventListener("click", () => {
       window.location.href = `race.html?meeting_key=${row.meeting_key}`;
     });
@@ -330,23 +330,23 @@ function renderTeamRacePoints(rows) {
 }
 
 
-// --- INICIALIZAÇÃO (MAIN) ---
+
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const teamName = getTeamFromUrl(); // Pega o time da URL (ex: ?team=McLaren)
+    const teamName = getTeamFromUrl(); 
 
     if (!teamName) {
         console.error("Nenhum time especificado na URL.");
-        // Opcional: Redirecionar ou mostrar mensagem de erro na tela
+        
         return;
     }
 
     console.log(`Carregando dados para a equipe: ${teamName}`);
 
-    // 1. Renderiza o cabeçalho (Nome, Logo, Carro)
+    
     renderTeamHeader(teamName);
 
-    // Mostrar placeholders até as chamadas à API responderem
+    
     const statsContainer = document.getElementById("team-stats");
     if (statsContainer) statsContainer.textContent = "Carregando dados...";
 
@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         racesBody.innerHTML = `<tr><td colspan="3" style="text-align:center">Carregando...</td></tr>`;
     }
 
-    // 2. Busca e renderiza os pilotos
+    
     try {
         const drivers = await fetchTeamDrivers(teamName);
         renderTeamDrivers(drivers);
@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Erro ao carregar pilotos:", error);
     }
 
-    // 3. Calcula estatísticas e preenche a tabela de corridas
+    
     try {
         const stats = await computeTeamSeasonStats(teamName);
         if (stats) {
@@ -391,7 +391,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderTeamHeader(teamName);
 
-    // Mostrar placeholders até as chamadas à API responderem
+    
     const statsContainer2 = document.getElementById("team-stats");
     if (statsContainer2) statsContainer2.textContent = "Carregando dados...";
 

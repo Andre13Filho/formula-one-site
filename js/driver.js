@@ -1,6 +1,6 @@
 const BASE_URL = "https://api.openf1.org/v1";
 
-// 1. Ler driver_number da URL
+
 const params = new URLSearchParams(window.location.search);
 const driverNumber = params.get("driver_number");
 
@@ -25,7 +25,7 @@ async function populateDriverSelect() {
     }
     const drivers = await res.json();
 
-    // ordenar por número do carro
+    
     drivers.sort((a, b) => a.driver_number - b.driver_number);
 
     drivers.forEach((d) => {
@@ -39,7 +39,7 @@ async function populateDriverSelect() {
   }
 }
 
-// 2. Form submit → redirecionar para driver.html com o número escolhido
+
 function setupDriverSearchForm() {
   const form = document.getElementById("driver-search-form");
   const select = document.getElementById("driver-select");
@@ -50,11 +50,11 @@ function setupDriverSearchForm() {
     const value = select.value;
     if (!value) return;
 
-    // redireciona para a mesma página com outro driver_number
+    
     window.location.href = `driver.html?driver_number=${value}`;
   });
 }
-// 2. Info básica do piloto
+
 async function loadDriverInfo() {
   if (!driverNumber) return;
 
@@ -136,12 +136,12 @@ async function loadDriverInfo() {
   const img = document.getElementById("driver-photo");
   if (img) {
     const localSrc = `../style/images/drivers/${d.driver_number}.png`;
-    img.src = localSrc;              // tenta SEMPRE a pasta local primeiro
+    img.src = localSrc;              
     img.alt = d.full_name;
 
-    img.onerror = () => {            // se a imagem local não existir
+    img.onerror = () => {            
       if (d.headshot_url) {
-        img.src = d.headshot_url;    // usa a headshot do OpenF1
+        img.src = d.headshot_url;    
       } else {
         img.src = "../style/images/driver-placeholder.png";
       }
@@ -159,7 +159,7 @@ async function loadDriverInfo() {
       logoImg.src = `../style/images/teams/${fileName}`;
       logoImg.alt = teamName;
     } else {
-      // fallback: show a generic icon or hide the img
+      
       logoImg.style.display = "none";
     }
   }
@@ -167,7 +167,7 @@ async function loadDriverInfo() {
 
 }
 
-// 3. Stats da temporada + resultados por corrida
+
 async function loadDriverSeasonStats(year = 2025) {
   if (!driverNumber) return;
 
@@ -227,7 +227,7 @@ async function loadDriverSeasonStats(year = 2025) {
     });
   });
 
-  // ← fora do map, ainda dentro da função
+  
   await Promise.all(promises);
 
   document.getElementById("driver-races").textContent = races;
@@ -255,7 +255,7 @@ async function loadDriverSeasonStats(year = 2025) {
   });
 }
 
-// 4. Inicializar página
+
 loadDriverInfo().catch((e) => {
   console.error("Erro em loadDriverInfo:", e);
 });

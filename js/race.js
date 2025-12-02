@@ -1,6 +1,6 @@
 const BASE_URL = "https://api.openf1.org/v1";
 
-// 1. Ler meeting_key da URL
+
 const params = new URLSearchParams(window.location.search);
 const meetingKey = params.get("meeting_key");
 
@@ -10,7 +10,7 @@ if (!meetingKey) {
   throw new Error("meeting_key ausente na URL");
 }
 
-// 2. Buscar informações básicas da corrida (/meetings)
+
 async function loadRaceInfo() {
   const res = await fetch(`${BASE_URL}/meetings?meeting_key=${meetingKey}`);
   if (!res.ok) {
@@ -30,7 +30,7 @@ async function loadRaceInfo() {
     `${m.location} • ${m.country_name} • ${m.year}`;
 }
 
-// 3. Buscar sessão de corrida e resultado (/sessions + /session_result + /drivers)
+
 async function loadRaceResults() {
   const tableBody = document.getElementById("race-results-body");
   tableBody.innerHTML = `
@@ -38,7 +38,7 @@ async function loadRaceResults() {
   `;
 
   try {
-    // 1) achar a sessão Race desse meeting
+    
     const sessionsRes = await fetch(
       `${BASE_URL}/sessions?meeting_key=${meetingKey}&session_name=Race`
     );
@@ -55,7 +55,7 @@ async function loadRaceResults() {
 
     const raceSessionKey = sessions[0].session_key;
 
-    // 2) resultados da corrida
+    
     const resultRes = await fetch(
       `${BASE_URL}/session_result?session_key=${raceSessionKey}`
     );
@@ -64,7 +64,7 @@ async function loadRaceResults() {
     }
     const results = await resultRes.json();
 
-    // 3) mapa de drivers para nomes/equipes
+    
     const driversRes = await fetch(
       `${BASE_URL}/drivers?session_key=${raceSessionKey}`
     );
@@ -77,7 +77,7 @@ async function loadRaceResults() {
       };
     });
 
-    // 4) montar tabela
+    
     tableBody.innerHTML = "";
     if (!results.length) {
       tableBody.innerHTML = `
@@ -107,8 +107,8 @@ async function loadRaceResults() {
       const teamCell = document.createElement("td");
       teamCell.textContent = info ? info.team_name : "-";
 
-      // const lapsCell = document.createElement("td");
-      // lapsCell.textContent = row.laps_completed ?? row.laps ?? "-";
+      
+      
 
       const timeCell = document.createElement("td");
       let timeText = "-";
@@ -119,8 +119,8 @@ async function loadRaceResults() {
         timeText = row.time;
       } else if (row.gap_to_leader) {
         timeText = `+${row.gap_to_leader}s`;
-      // } else if (row.laps_behind && row.laps_behind > 0) {
-      //   timeText = `${row.laps_behind} LAP`;
+      
+      
       } else if (index === 0 && winnerTime) {
         timeText = winnerTime;
       }
@@ -134,7 +134,7 @@ async function loadRaceResults() {
       tr.appendChild(numCell);
       tr.appendChild(nameCell);
       tr.appendChild(teamCell);
-      // tr.appendChild(lapsCell);
+      
       tr.appendChild(timeCell);
       tr.appendChild(ptsCell);
 
@@ -150,6 +150,6 @@ async function loadRaceResults() {
 }
 
 
-// 4. Inicializar página
+
 loadRaceInfo().catch(console.error);
 loadRaceResults().catch(console.error);

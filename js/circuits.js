@@ -1,5 +1,5 @@
-// js/circuits.js
-// js/circuits.js (or a separate config file)
+
+
 const CIRCUITS = [
   {
     slug: "australia",
@@ -265,7 +265,7 @@ function renderCircuitsGrid() {
     card.appendChild(nameDiv);
 
     card.addEventListener("click", () => {
-      // abre página de detalhes, passando o slug e/ou country_name
+      
       window.location.href = `circuit.html?slug=${circuit.slug}&country=${encodeURIComponent(
         circuit.country_name
       )}`;

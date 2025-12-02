@@ -1,4 +1,4 @@
-// mapa estático: nome oficial -> arquivo de logo na pasta style/images/teams
+
 const TEAMS = [
   { name: "Red Bull Racing",   logo: "red-bull.png" },
   { name: "Mercedes",          logo: "mercedes.png" },

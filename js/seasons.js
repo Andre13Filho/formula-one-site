@@ -25,14 +25,14 @@ const SEASON_CHAMPIONS = {
 };
 
 
-// anos que você quer mostrar
+
 const SEASONS = [2025, 2024, 2023, 2022, 2021];
 
-// -------- helpers --------
 
-// mapa de drivers (para mostrar nomes bonitos)
+
+
 async function getDriverMapForYear(year) {
-  // usar última sessão da temporada (Race) para garantir grid correto
+  
   const sessionsRes = await fetch(
     `${BASE_URL}/sessions?year=${year}&session_name=Race`
   );
@@ -40,7 +40,7 @@ async function getDriverMapForYear(year) {
   const sessions = await sessionsRes.json();
   if (!sessions.length) return {};
 
-  // pega a última sessão da temporada
+  
   sessions.sort((a, b) => new Date(a.date_start) - new Date(b.date_start));
   const lastSessionKey = sessions[sessions.length - 1].session_key;
 
@@ -60,9 +60,9 @@ async function getDriverMapForYear(year) {
   return map;
 }
 
-// campeão de pilotos + equipes
+
 async function getSeasonChampions(year) {
-  // 1) todas as corridas da temporada (apenas Race)
+  
   const sessionsRes = await fetch(
     `${BASE_URL}/sessions?year=${year}&session_name=Race`
   );
@@ -76,10 +76,10 @@ async function getSeasonChampions(year) {
     return { driverChampion: null, teamChampion: null };
   }
 
-  const driverPoints = {};   // driver_number -> pts
-  const teamPoints = {};     // team_name   -> pts
+  const driverPoints = {};   
+  const teamPoints = {};     
 
-  // 2) somar pontos em todas as corridas
+  
   await Promise.all(
     sessions.map(async (s) => {
       const res = await fetch(
@@ -119,16 +119,16 @@ async function getSeasonChampions(year) {
     return { driverChampion: null, teamChampion: null };
   }
 
-  // 3) ordenar e pegar campeões
-  driverEntries.sort((a, b) => b[1] - a[1]); // [driver_number, pts]
-  teamEntries.sort((a, b) => b[1] - a[1]);   // [team_name, pts]
+  
+  driverEntries.sort((a, b) => b[1] - a[1]); 
+  teamEntries.sort((a, b) => b[1] - a[1]);   
 
   const driverChampionNumber = Number(driverEntries[0][0]);
   const driverChampionPoints = driverEntries[0][1];
   const teamChampionName = teamEntries[0][0];
   const teamChampionPoints = teamEntries[0][1];
 
-  // 4) traduzir número do piloto para nome
+  
   const driverMap = await getDriverMapForYear(year);
   const driverInfo = driverMap[driverChampionNumber];
 
@@ -142,7 +142,7 @@ async function getSeasonChampions(year) {
 }
 
 
-// -------- render --------
+
 
 async function loadSeasonsGrid() {
   const grid = document.getElementById("seasons-grid");
@@ -182,7 +182,7 @@ async function loadSeasonsGrid() {
 }
 
 
-// boot
+
 document.addEventListener("DOMContentLoaded", () => {
   loadSeasonsGrid().catch(console.error);
 });

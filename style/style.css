@@ -1,4 +1,4 @@
-/* style/style.css */
+
 
 @font-face {
     font-family: 'MyF1Font';
@@ -78,65 +78,65 @@ header strong {
     letter-spacing: 1px;
 }
 
-/* --- Action Cards Grid --- */
+
 .actions-grid {
     display: flex;
     justify-content: space-between;
-    /* Spreads them out evenly */
+    
     gap: 20px;
-    /* Gap between cards */
+    
     padding: 40px 20px;
-    /* Spacing around the whole section */
+    
     max-width: 1200px;
-    /* Stops them getting too wide on huge screens */
+    
     margin: 0 auto;
-    /* Centers the section */
+    
     flex-wrap: wrap;
-    /* Allows cards to stack on mobile phones */
+    
 }
 
-/* --- Individual Card Style --- */
+
 .action-card {
     flex: 1;
-    /* Makes all 3 cards same width */
+    
     min-width: 250px;
-    /* Minimum width before stacking */
+    
     background: white;
     border-radius: 15px;
-    /* Rounded corners */
+    
     text-decoration: none;
-    /* Removes underline from links */
+    
     color: black;
 
-    /* The F1 Look: Border on the Left and slight Shadow */
+    
     border-left: 5px solid #e10600;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
-    /* Animation Transition */
+    
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
 }
 
-/* Inner Padding */
+
 .action-card .card-content {
     padding: 30px;
     display: flex;
     justify-content: space-between;
-    /* Pushes text left, arrow right */
+    
     align-items: center;
 }
 
-/* Typography */
+
 .action-card h3 {
     font-family: 'MyF1Font', sans-serif;
-    /* Your Custom Font */
+    
     font-size: 1.2rem;
     margin: 0;
     text-transform: uppercase;
     line-height: 1.2;
 }
 
-/* The Arrow Styling */
+
 .action-card .arrow {
     font-size: 1.5rem;
     color: #e10600;
@@ -144,24 +144,24 @@ header strong {
     transition: transform 0.3s ease;
 }
 
-/* --- Hover Effects (The "Pop") --- */
+
 .action-card:hover {
     transform: translateY(-5px);
-    /* Moves card up slightly */
+    
     box-shadow: 0 10px 25px rgba(225, 6, 0, 0.15);
-    /* Reddish shadow */
+    
     background-color: #15151e;
-    /* Turns Dark on hover */
+    
 }
 
 .action-card:hover h3 {
     color: white;
-    /* Text turns white */
+    
 }
 
 .action-card:hover .arrow {
     transform: translateX(10px);
-    /* Arrow moves right */
+    
 }
 
 .dashboard-grid {
@@ -172,34 +172,35 @@ header strong {
     max-width: 1200px;
     margin: 0 auto;
 
-    /* --- ADD THIS LINE --- */
+    
     align-items: start;
-    /* This tells the cards: "Don't stretch! Just fit your content." */
+    
 }
 
 .calendar-container .table-responsive {
     max-height: 855px;
-    /* Adjust this number as you like */
+    
     overflow-y: auto;
-    /* Adds a scrollbar inside the card */
+    
 }
 
-/* Make it stack on mobile phones */
+
 @media (max-width: 768px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* --- Generic Card Style for Tables --- */
+
 .dashboard-card {
     background: white;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    /* Keeps corners rounded */
+    
     border-top: 5px solid #e10600;
-    /* F1 Red Top Border */
+    
+    margin-bottom: 20px;
 }
 
 .card-header {
@@ -215,17 +216,17 @@ header strong {
     text-transform: uppercase;
 }
 
-/* --- F1 Table Styling --- */
+
 .table-responsive {
     overflow-x: auto;
-    /* Scrollbar if table is too wide */
+    
 }
 
 .f1-table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'MyF1Font', sans-serif;
-    /* Or Titillium Web */
+    
     font-size: 0.9rem;
 }
 
@@ -233,7 +234,7 @@ header strong {
     text-align: left;
     padding: 12px 15px;
     background-color: #15151e;
-    /* Dark header */
+    
     color: white;
     font-weight: normal;
     text-transform: uppercase;
@@ -245,17 +246,17 @@ header strong {
     border-bottom: 1px solid #eee;
 }
 
-/* Zebra Striping for rows */
+
 .f1-table tbody tr:nth-child(even) {
     background-color: #f8f8f8;
 }
 
 .f1-table tbody tr:hover {
     background-color: #ffe5e5;
-    /* Light red hover */
+    
 }
 
-/* Special Styling for the "Position" column */
+
 .pos-badge {
     background-color: #15151e;
     color: white;
@@ -273,10 +274,10 @@ header strong {
 
 .driver-photo {
     width: 180px;
-    /* não maior do que o arquivo real */
+    
     height: 180px;
     object-fit: cover;
-    /* corta sem distorcer */
+    
     border-radius: 12px;
     border: 2px solid #ffffff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
@@ -287,10 +288,12 @@ header strong {
 }
 
 
+
 .driver-team-row {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 .team-logo {
@@ -314,62 +317,52 @@ header strong {
     font-size: 0.9rem;
 }
 
-.driver-team-row {
-    display: flex;
-    /* Puts items side-by-side */
-    align-items: center;
-    /* Centers them vertically */
-    gap: 10px;
-    /* Adds space between text and logo */
-    margin-bottom: 20px;
-}
-
-.team-logo {
+.driver-team-row .team-logo {
     height: 30px;
     margin-bottom: 20px;
-    /* Controls the logo size */
+    
     width: auto;
-    /* Maintains aspect ratio */
+    
     display: block;
-    /* Removes extra space below image */
+    
 }
 
-/* Optional: Adjust your badge if needed */
+
 .team-badge {
     margin-bottom: 0;
-    /* Removes bottom margin so it aligns with logo */
+    
 }
 
-/* --- NEW DRIVER PROFILE STYLES --- */
 
-/* 1. Layout: Photo Left, Text Right */
+
+
 .driver-profile-container {
     display: flex;
     align-items: center;
-    /* Centers them vertically */
+    
     padding: 30px;
     gap: 30px;
-    /* Space between photo and text */
+    
     background: linear-gradient(145deg, #ffffff 0%, #f4f4f4 100%);
-    /* Subtle gradient */
+    
 }
 
-/* 2. The Photo Box (Fixes the distortion/quality) */
+
 .profile-image-box {
     flex-shrink: 0;
-    /* Stops the image from getting squashed */
+    
     width: 200px;
-    /* Fixed width */
+    
     height: 200px;
-    /* Fixed height */
+    
     border-radius: 50%;
-    /* Makes it a circle (Professional TV Look) */
+    
     overflow: hidden;
-    /* Crops the square photo into a circle */
+    
     border: 5px solid #e10600;
-    /* F1 Red Border */
+    
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    /* Drop shadow */
+    
     background-color: white;
 }
 
@@ -377,17 +370,17 @@ header strong {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* THE KEY FIX: Crops image perfectly instead of stretching it */
+    
     object-position: top center;
-    /* Focuses on the face */
+    
 }
 
-/* 3. Typography & Badges */
+
 .profile-info-box h2 {
     font-family: 'MyF1Wide', sans-serif;
     font-size: 2.2rem;
     margin: 0px 10px 10px -24px;
-    /* margin-left: -10px; */
+    
     line-height: 1;
     color: #15151e;
 }
@@ -404,7 +397,7 @@ header strong {
     margin-bottom: 20px;
 }
 
-/* 4. Meta Data (Number & Country) */
+
 .driver-meta-grid {
     display: flex;
     gap: 30px;
@@ -431,7 +424,7 @@ header strong {
     color: #e10600;
 }
 
-/* 5. Stats List Styling (Optional Polish) */
+
 .stats-list {
     list-style: none;
     padding: 0;
@@ -540,7 +533,7 @@ header strong {
   background-color: #f3f3f3;
 }
 
-/* table already collapses nicely; for very small screens you can tweak: */
+
 @media (max-width: 600px) {
   .f1-table td,
   .f1-table th {
@@ -555,23 +548,23 @@ header strong {
   overflow: hidden;
 }
 
-/* full banner size */
+
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0; /* top:0; right:0; bottom:0; left:0 */
-  background: rgba(0, 0, 0, 0.55); /* preto suave em todo o banner */
+  inset: 0; 
+  background: rgba(0, 0, 0, 0.55); 
   z-index: 1;
 }
 
-.banner-img {
+.hero .banner-img {
     width: 100%;
-    height: 950px; /* Try 400px, 500px, etc. */
+    height: 950px; 
     object-fit: cover;
     display: block;
 }
 
-/* text on top of the overlay */
+
 .hero-text {
   position: absolute;
   left: 5%;
@@ -579,7 +572,7 @@ header strong {
   max-width: 50%;
   color: #ffffff;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-  z-index: 2;          /* acima do overlay */
+  z-index: 2;          
 }
 
 .hero-text h1 {
@@ -590,20 +583,6 @@ header strong {
 .hero-text p {
   margin: 0;
   font-size: 0.95rem;
-}
-
-.driver-search-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-
-.driver-search-form select,
-.driver-search-form button {
-  padding: 6px 10px;
-  font-family: 'MyF1Font', sans-serif;
-  font-size: 0.9rem;
 }
 
 .drivers-grid {
@@ -648,15 +627,15 @@ header strong {
 }
 .seasons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* antes 240px */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
   gap: 24px;
 }
 
 .season-card {
   background: #ffffff;
   border-radius: 10px;
-  padding: 18px 20px;      /* mais espaço interno */
-  min-height: 140px;       /* força altura maior */
+  padding: 18px 20px;      
+  min-height: 140px;       
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -709,13 +688,13 @@ header strong {
 .team-title {
   text-align: center;
   margin: 0;
-  font-size: 2rem;    /* ajuste se quiser maior/menor */
+  font-size: 2rem;    
 }
 
 .team-header {
   font-family: 'MyF1Wide', sans-serif;
   display: flex;
-  flex-direction: column;   /* car below title area */
+  flex-direction: column;   
   align-items: center;
   gap: 16px;
   padding: 10px 0 20px;
@@ -729,7 +708,7 @@ header strong {
 
 .team-car-img {
   width: 100%;
-  max-width: 900px;   /* mantém o carro grande */
+  max-width: 900px;   
   height: auto;
   object-fit: contain;
   display: block;
@@ -751,31 +730,31 @@ header strong {
   object-fit: cover;
 }
 #team-name {
-    font-size: 4rem;              /* Very big text (Adjust to 3rem or 5rem if needed) */
-    text-align: center;           /* Centers the text horizontally */
-    width: 100%;                  /* Ensures it takes full width to center properly */
-    margin: 30px 0 10px 0;        /* Adds space above and below */
+    font-size: 4rem;              
+    text-align: center;           
+    width: 100%;                  
+    margin: 30px 0 10px 0;        
     
-    font-family: 'MyF1Wide', sans-serif; /* Your Wide F1 font */
-    text-transform: uppercase;    /* Forces CAPS like "WILLIAMS RACING" */
-    line-height: 1;               /* Keeps multi-line names tight */
-    color: #000000;               /* Solid black */
+    font-family: 'MyF1Wide', sans-serif; 
+    text-transform: uppercase;    
+    line-height: 1;               
+    color: #000000;               
 }
 
-/* Optional: Removes the gray background from the header so it looks cleaner */
+
 .dashboard-card .card-header {
-    background: transparent;      /* Removes the gray box background */
-    border-bottom: none;          /* Removes the line under the name */
-    display: flex;                /* Helps with centering */
-    justify-content: center;      /* Centers the content */
+    background: transparent;      
+    border-bottom: none;          
+    display: flex;                
+    justify-content: center;      
 }
 
 .dashboard-card .stat-item {
     margin: 10px 0;
-    margin-left: 15px;               /* Spacing between stats */
-    font-family: 'MyF1Font', sans-serif; /* Your F1 font */
+    margin-left: 15px;               
+    font-family: 'MyF1Font', sans-serif; 
 }
-/* Race Header Container */
+
 .race-header-wrapper {
     background: white;
     padding: 30px 20px;
@@ -802,10 +781,10 @@ header strong {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-align: center;
-    display: block;  /* Forces it to be on its own line */
+    display: block;  
 }
 
-/* Linhas clicáveis */
+
 .clickable-row {
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -815,7 +794,7 @@ header strong {
   background-color: #f5f5f5;
 }
 
-/* Tabela responsiva em telas pequenas */
+
 @media screen and (max-width: 768px) {
   .f1-table thead {
     display: none;
@@ -858,17 +837,17 @@ header strong {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 }
-/* Add space below the car image */
+
 .team-car-img {
     width: 100%;
     max-width: 900px;
     height: auto;
     object-fit: contain;
     display: block;
-    margin-bottom: 30px;  /* Add this line */
+    margin-bottom: 30px;  
 }
 
-/* Add space below the team header section */
+
 .team-header {
     font-family: 'MyF1Wide', sans-serif;
     display: flex;
@@ -876,26 +855,17 @@ header strong {
     align-items: center;
     gap: 16px;
     padding: 10px 0 20px;
-    margin-bottom: 30px;  /* Add this line */
+    margin-bottom: 30px;  
 }
 
-/* Ensure dashboard cards have proper spacing */
-.dashboard-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border-top: 5px solid #e10600;
-    margin-bottom: 20px;  /* Add this line */
-}
 img {
   max-width: 100%;
   height: auto;
 }
 
-/* ===== MOBILE RESPONSIVENESS ===== */
 
-/* Smartphone pequeno (até 480px) */
+
+
 @media (max-width: 480px) {
   header {
     flex-direction: column;
@@ -981,7 +951,7 @@ img {
   }
 }
 
-/* Tablet (481px a 768px) */
+
 @media (max-width: 768px) and (min-width: 481px) {
   header {
     flex-wrap: wrap;
@@ -1020,7 +990,7 @@ img {
   }
 }
 
-/* Landscape mode (altura menor que 600px) */
+
 @media (max-height: 600px) {
   header {
     padding: 8px 15px;
@@ -1043,7 +1013,7 @@ img {
   }
 }
 
-/* Ajustes para tablets maiores (769px a 1024px) */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -1058,7 +1028,7 @@ img {
   }
 }
 
-/* Garantir que botões e elementos clicáveis tenham tamanho adequado em mobile */
+
 @media (max-width: 768px) {
   button,
   a,
